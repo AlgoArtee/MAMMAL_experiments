@@ -1,0 +1,672 @@
+
+
+===== PAGE 1 =====
+npj | drug discovery Article
+https://doi.org/10.1038/s44386-026-00047-4
+MAMMAL - Molecular Aligned Multi-Modal
+Architecture and Language for biomedical
+discovery
+Check for updates
+Yoel Shoshan1,4 , Moshiko Raboh1,4, Michal Ozery-Flato1,4, Vadim Ratner1, Alex Golts1, Jeffrey K. Weber2,
+Ella Barkan1, Simona Rabinovici-Cohen1, Sagi Polaczek1, Ido Amos1, Ben Shapira1, Liam Hazan1,
+Matan Ninio1, Sivan Ravid1, Michael M. Danziger1, Yosi Shamay3, Sharon Kurant3, Joseph A. Morrone2,
+Parthasarathy Suryanarayanan2, Michal Rosen-Zvi1,4 & Efrat Hexter1,4
+Modern AI (Artificial Intelligence) methods offer new opportunities in pharmacology by enabling
+improved modeling of disease mechanisms and drug action learned from large and heterogeneous
+biological datasets. A central challenge is developing models that can jointly integrate disparate
+biomedical modalities. We introduce MAMMAL (Molecular Aligned Multi Modal Architecture and
+Language), a foundation model for cross-modal learning, designed to address the challenges
+associated with drug discovery tasks. MAMMAL was pre-trained on 2 billion samples across protein
+and antibody sequences, small molecules, and gene expression profiles, and supports classification,
+regression, and generative tasks on cross-modal inputs. Across eleven benchmarks covering multiple
+stages of the drug discovery pipeline, MAMMAL achieves state-of-the-art performance on nine tasks
+and competitive results on two. In an antibody-antigen binding benchmark, fine-tuned MAMMAL
+prediction scores significantly outperform AlphaFold3 confidence scores, used here as a reference
+proxy for binding likelihood, in five of seven antigen targets. The MAMMAL framework and pretrained
+models are publicly available to support open and collaborative research.
+Despite major advances in understanding health and disease, many com- Accelerating drug discovery and improving the predictive accuracy of
+plex biological processes remain poorly understood. Recent progress in its steps have become a central focus in biomedical research, with the goal of
+artificial intelligence has raised the prospect that longstanding health chal- streamlining target identification, drug design, and testing8–10. Analyzing
+lenges may prove treatable with AI-based methods1 and that the high failure gene expression profiles, particularly from single-cell RNA sequencing
+rate of drugs in clinical trials, where approximately 90% of drug candidates (scRNA-seq), has emerged as a key approach for distinguishing disease-
+fail to achieve regulatory approval2, can be improved. Over the past century, associated cell populations and characterizing drug-induced cellular
+the translation of biological discoveries into effective therapies has matured. responses11–14. These analyses support target identification, mechanistic
+The drug discovery journey follows a multi-step pipeline that begins with understanding, and assessment of drug effects across diverse cellular
+identifying disease-associated proteins, progresses to finding compounds contexts15,16. In parallel, generative models have been increasingly applied to
+that can effectively target these proteins, and culminates in optimizing drug drug design, enabling the synthesis of novel candidate molecules for further
+candidates to meet stringent standards for efficacy and safety. This process is evaluation17–19. As high-throughput screening assays for measuring drug
+both costly and labor-intensive, requiring extensive laboratory assays that binding affinity are costly and challenging to scale, accurate prediction of
+measure drug-target interactions, characterize cellular responses, and vali- drug-target interactions can significantly enhance drug design, improving
+date therapeutic safety and efficacy3–5. Therapeutic modalities range from both efficacy and precision. Overall, predictive modeling of binding affinity,
+small molecules, which are stable, easy to manufacture, and suitable for oral toxicity, and efficacy in the early stages of the pipeline can reduce reliance on
+delivery6, to biologic therapeutics, such as engineered antibodies, which offer expensive late-stage testing, ultimately saving time and resources in drug
+high specificity but require more complex manufacturing and delivery7. development.
+1IBM Research-Israel, IBM Research, Haifa, Israel. 2IBM TJ Watson Research Center, IBM Research, New York, NY, USA. 3Faculty of Biomedical Engineering,
+Technion - IIT, Haifa, Israel. 4These authors contributed equally: Yoel Shoshan, Moshiko Raboh, Michal Ozery-Flato, Michal Rosen-Zvi, Efrat Hexter.
+e-mail: yoels@il.ibm.com
+npj Drug Discovery | ( 2026) 3:14 1
+;,:)(0987654321 ;,:)(0987654321
+
+===== PAGE 2 =====
+https://doi.org/10.1038/s44386-026-00047-4 Article
+A central challenge in developing predictive and generative AI models representative encoder-decoder examples are provided in the Supple-
+for drug discovery is determining how the different biomedical modalities mentary Table S1.
+and entities should be represented and combined as model inputs and AlphaFold22, whose development contributed to the 2024 Nobel
+outputs20. This challenge is particularly acute for interaction-centric tasks, Prize in Chemistry, revolutionized protein structure prediction. Its
+such as predicting whether a small-molecule drug will bind a specific protein extension AlphaFold-Multimer23 enabled modeling of antibody-antigen
+target. While sequence-based representations of molecules (e.g., SMILES) complexes, while AlphaFold 3 (AF3)24 further improved accuracy and
+and proteins have demonstrated considerable success, the representation of added nucleic acid/small molecule support. Motivated by AF3’s reported
+transcriptomic data as sequences has only recently been explored, leading to advances, we evaluated its performance on therapeutic Antibody and
+a range of emerging approaches21. Nanobody complexes (Subsection 2.10). Comparative analysis reveals
+In this work, we introduce a cross-domain foundation model that that MAMMAL achieves better classification performance than AF3 in
+represents small molecules, proteins, and transcriptomic data within a five of seven targets (Table 2).
+unified sequence framework. We present MAMMAL (Molecular
+Aligned Multi-Modal Architecture and Language), designed to address Evaluation
+core challenges in AI-driven drug discovery. Our key contributions are: We compiled a comprehensive set of 11 benchmarks covering multiple data
+(1) a novel multi-alignment framework that integrates molecular, pro- domains and task types, including classification, regression and generation,
+tein, and gene-expression inputs using a flexible, structured prompt as well as single-entity, multi-entity, and multi-domain tasks. These
+syntax, enabling modeling of complex multi-entity interactions such as benchmarks address key stages of the drug discovery process: Identifying
+drug-target binding; (2) an architecture tailored to drug discovery that target cell types (Cell Type) and advancing precision medicine (Cancer-
+natively incorporates numerical values into its embedding space via Drug Response 1-3); predicting drug efficacy (BBBP) and safety (ClinTox);
+continuous projections. This improves precision for tasks such as affinity predicting the binding affinity of small-molecule drugs to target proteins
+prediction and structural integration, while supporting both predictive (DTI); predicting interactions of biological drugs (PPI); and designing new
+and generative objectives; and (3) a large-scale pre-trained model trained drugs, such as antibodies, to target specific proteins (Ab Infilling).
+on over 2 billion samples across denoising, infilling, and binding-related To enable fair and direct comparison to prior work, benchmark
+tasks. Across 11 benchmarks spanning multiple stages of the drug dis- selection prioritized datasets with predefined train, validation, and test splits
+covery pipeline, fine-tuned MAMMAL achieves state-of-the-art per- or with established splitting strategies reported in the corresponding state of
+formance on nine tasks. The model and pre-trained weights are publicly the art studies. For each benchmark, we followed the data splits and eva-
+available on https://huggingface.co/ibm/biomed.omics.bl.sm.ma-ted- luation metrics used in the original benchmark or SOTA reference. When
+458m under the name ibm/biomed.omics.bl.sm.ma-ted- explicit train—validation—test splits were available, ibm/biomed.o-
+458m, providing a platform for advancing research in multimodal mics.bl.sm.ma-ted-458m was fine tuned on the training set, the best
+biomedical modeling. checkpoint was selected using the validation set, and final performance was
+reported on the test set. For benchmarks evaluated using cross validation, we
+Results adopted the same protocol as the corresponding prior work. Unless
+To evaluate the performance and generalization capabilities of ibm/ otherwise noted, standard errors were estimated by training the models with
+biomed.omics.bl.sm.ma-ted-458m, we selected a diverse set of three different random seeds and calculating the standard deviation of their
+existing benchmarks spanning multiple task types and stages of the drug performance on the held out test set. Detailed descriptions of each bench-
+discovery pipeline, prioritizing benchmarks with clearly defined splits mark, the fine tuning procedures, and the evaluation protocols are provided
+when those were available. We assessed model quality through a fine- alongside the corresponding results. For the DTI benchmark, performance
+tuning-based evaluation strategy, where the pretrained model is adapted is reported using normalized root mean square error (NRMSE), defined as
+to each benchmark and compared against specialized state-of-the-art the root mean square error divided by the standard deviation of the test
+(SOTA) models. The evaluation methodology and fine-tuning protocol labels. The same normalization is applied to both MAMMAL and reported
+as well as detailed descriptions of each benchmark—including back- SOTA results, yielding values below 1 and enabling joint visualization
+ground, significance for drug discovery, prior models, and data statistics alongside other performance metrics in Fig. 1(E). We consider MAMMAL
+—are provided in the subsections below. A summary of performance to outperform existing state of the art when the relative improvement,
+across tasks is presented in Table 1 and visualized in Fig. 1E, and computed as ∣SOTA − MAMMAL∣/SOTA, exceeds 1%.
+Table 1 | Comparison of SOTA and MAMMAL Performance Across Benchmarks
+Benchmark Domain Type Metric SOTA MAMMAL Imp.
+Cell type GE cls ↑ F1 27 0.710 0.763 ± 0.012 7.5 %
+BBBP SM cls ↑ AUROC 32 0.937 0.957 ± 0.006 2.2 %
+ClinTox SM cls ↑ AUROC 32 0.948 0.986 ± 0.007 4.0 %
+Cancer-Drug Response 1 GE+SM reg ↑ Pearson 92 0.887 0.917 ± 0.001 3.4 %
+Cancer-Drug Response 2 GE+SM reg ↑ Pearson 92 0.900 0.931 ± 0.002 3.4 %
+Cancer-Drug Response 3 GE+SM reg ↑ Pearson 36 0.923 [0.917–0.929] 0.928 ± 0.000 0.5 %
+Ab Infilling Protein gen ↑ CDRH3-AAR 47 0.375 0.446 ± 0.002 19.0 %
+AbAg Bind Protein cls ↑ AUROC 63 0.924 [0.923–0.925] 0.928 ± 0.002 0.4 %
+TCR Bind Protein cls ↑ AUROC 54 0.862 [0.85–0.868] 0.879 ± 0.003 2.0 %
+PPI ΔΔG Protein reg ↑ Pearson 104 0.663 0.852 ± 0.041 28.5 %
+DTI Prot.+SM reg ↓ NRMSE 60 0.942 ± 0.028 0.906 ± 0.011 3.8%
+For NRMSE, lower is better. For other metrics (AUROC, CDRH3-AAR, Pearson, Spearman, and F1), higher is better. Each row shows the results from a MAMMAL model fine-tuned from ibm/
+biomed.omics.bl.sm.ma-ted-458m for the corresponding task. In the “Type” column: clsclassification, reg regression, gengeneration, Imp. improvement (percentage) of our model over SOTA. In the
+“Domain” column: GE genes expression, SM small molecule, Prot. protein.
+npj Drug Discovery | ( 2026) 3:14 2
+
+===== PAGE 3 =====
+https://doi.org/10.1038/s44386-026-00047-4 Article
+Fig. 1 | Overview of MAMMAL pretraining data, model architecture, and prediction head for scalar outputs. In encoder-decoder mode, residual connections
+downstream tasks. A We introduce a multi-align model pretrained on six datasets, inject features from the encoder’s final hidden layer into each decoder layer, and a
+each containing tens to hundreds of millions of data points. These data points decoder-specific prediction head outputs the final logits. C Diverse downstream
+include protein sequences, small molecules, and gene expression profiles, with a tasks performed by the multi-align model, mapped to their contributions within the
+combined sample size of 2 billion. B The multi-align model combines flexible steps of a typical drug discovery pipeline. D Diverse downstream tasks performed by
+encoder-only and encoder-decoder components. It takes sequences as input, which the multi-align model, categorized by data type used in the fine-tuning process.
+may contain any combination of tokens and scalar elements, processed by an E Performance of the multi-align model across a diverse set of tasks compared to
+encoder stack consisting of self-attention blocks. In encoder-only mode, a dedicated SOTA. Panel (E) was generated using Matplotlib. Panels (A–D) were created using
+token prediction head outputs logits for token predictions, with an optional scalar Illustrator and PowerPoint.
+Table 2 | Per-target AUROC comparison between MAMMAL and AF3 on held-out antibody/nanobody–antigen test subsets
+Target length (AA) n pos MAMMAL AUROC AF3 AUROC ΔAUROC P-value
+HER2 ECD 630 60 30 0.93 0.45 +0.42 1.5 × 10−6
+Albumin 609 28 11 0.91 0.59 +0.32 7.4 × 10−3
+CD206 1,456 37 14 1.00 0.59 +0.41 1.1 × 10−5
+EGFR 1,210 28 11 0.94 0.49 +0.45 2.2 × 10−5
+TBG 384 32 5 0.63 1.00 −0.37 1.0 × 10−4
+TNFα 233 34 13 0.86 0.87 −0.01 NS
+VWF 2,813 34 13 0.83 0.32 +0.51 3.9 × 10−6
+P-values were computed using the DeLong test for correlated ROC curves. ΔAUROC denotes AUROCMAMMAL − AUROCAF3. NS indicates a non-significant difference (p > 0.1). ECD denotes the
+extracellular domain. Bold in the AUROC column of a method (MAMMAL or AF3) indicates higher result for that method. Bold in the ΔAUROC column indicates rows where MAMMAL outperforms AF3.
+Cell Type Annotation and annotation using classification25. Recent advances in transformer-based
+Cell type prediction enables researchers to distinguish between different cell and large-scale foundation models26–28 have shown improved performance.
+populations, such as those associated with various diseases11–14. It is also The input for this task is single-cell gene expression data. The
+crucial for understanding how diseases or drugs affect different cell types. In benchmark we used was based on the Zheng68k dataset29, which is
+recent years, a variety of methods have been developed for this task, composed of human peripheral blood mononuclear cells and is widely
+including approaches based on marker genes, correlation-based techniques, used for evaluating cell-type annotation performance, due to the
+npj Drug Discovery | ( 2026) 3:14 3
+
+===== PAGE 4 =====
+https://doi.org/10.1038/s44386-026-00047-4 Article
+similarity of the cell types involved. The dataset contains 68,579 cells current SOTA models for Cancer-Drug Response 1 and 2 (Table 1),
+across 11 cell types and originally included 32,738 genes, which after achieving a 3.4% increase in Pearson correlation values. Additionally, it
+removing non-expressed genes leaves 20,387 genes in the benchmark. yields results comparable to the SOTA for the Cancer-Drug Response 3
+Preprocessing involved normalization, log transformation of expression benchmark, with a slight improvement of 0.5%.
+values, followed by binning. Similar to the approach in30, our model uses a To further evaluate MAMMAL’s predictive capability on novel
+ranked list of expressed gene names, ordered by their expression levels, as compounds, we assessed drug response predictions for four drugs not
+input. The label to predict is provided in the cell ontology format present in the GDSC training data: Carfilzomib, Nintedanib, Infigratinib,
+“CL:NNNNNN” (see Supplementary Table S1). and Vemurafenib. Tanimoto similarity analysis confirmed that three of
+Following prior work27, we adopted a 5-fold cross-validation strategy to these drugs (Carfilzomib, Nintedanib, and Infigratinib) have no struc-
+fine-tune and evaluate ibm/biomed.omics.bl.sm.ma-ted-458m, turally similar compounds in the training set (Tanimoto coefficient <0.7),
+ensuring similar proportions of cell types across folds, and assessed per- while Vemurafenib shares moderate similarity (0.82) with PLX-4720, a
+formance using accuracy and macro F1 score. MAMMAL outperforms the BRAF inhibitor present in GDSC. We performed experimental validation
+previous state-of-the-art performance in both accuracy and F1 (Table 1 and using the same assay protocol employed in GDSC: cell viability was
+detailed results in Supplementary Table S2), achieving a 7.5% measured using CellTiter-Glo following 72-hour drug incubation, and
+improvement in F1. IC50 values were determined with Prism (GraphPad). The experimental
+measurements revealed a consistent potency ranking across all tested cell
+BBBP and ClinTox lines: Carfilzomib (most potent), followed by Nintedanib, Infigratinib,
+To ensure the development of safe and effective drugs, candidates must and Vemurafenib (least potent). MAMMAL predictions reproduced this
+satisfy rigorous criteria related to both efficacy and safety. In this study, we exact ranking for the tested cell lines. When extended to all 805 cell lines
+selected two relevant benchmarks from MoleculeNet31, a widely used suite of in GDSC, the model preserved this relative ordering in approximately
+benchmarks for evaluating machine learning models on small-molecule 90–95% of cases, suggesting that the predicted potency differences are
+drug properties: BBBP and ClinTox. The BBBP benchmark focuses on largely cell line–independent.
+predicting the ability of drugs to penetrate the blood-brain barrier, a critical Notably, Carfilzomib is a proteasome inhibitor approved exclusively
+consideration for drugs targeting the central nervous system. The ClinTox for hematological malignancies (multiple myeloma), with limited efficacy in
+benchmark comprises two related tasks: (1) predicting failure in clinical cells of solid tumors40. The model’s prediction of Carfilzomib as the most
+toxicity trials, and (2) predicting FDA approval status. The overall perfor- potent agent across diverse solid tumor cell lines aligns with our experi-
+mance on ClinTox is reported as the average performance across these mental observations and suggests potential broader applicability that war-
+two tasks. rants further investigation.
+MoLFormer32, a well-established model for molecular embeddings
+trained on 1.1 billion SMILES sequences, has achieved state-of-the-art Ab Infilling
+performance on both the BBBP and ClinTox benchmarks. In our study, we Antibodies are a family of proteins produced by the immune system to
+adopted the benchmarks from32, which provided predefined splits for neutralize foreign antigens and are of particular interest due to their high
+training, validation, and testing. MAMMAL surpasses MoLFormer on both specificity and strong binding to target molecules41,42. These characteristics
+benchmarks (Table 1), achieving an average area under the receiver oper- have made them a crucial class of therapeutics, driving significant research
+ating characteristic curve (AUROC) score of 0.957 on BBBP and 0.986 on efforts into the design of new antibody-based drug candidates7,43–45.
+ClinTox, representing improvements of 2.2% and 4%, respectively, over the Antigen-binding fragments (Fabs) are the antibody fragments that bind to
+state of the art. antigens. It is composed of one constant domain and one variable domain of
+each of the heavy and light chains. Each variable region is further divided
+Cancer-Drug Response into four framework (FR) regions and three complementarity-determining
+Identifying drug response at the cellular level is a critical step in the regions (CDRs). While FR regions are typically conserved, CDRs exhibit
+development of new drugs. Two key public databases supporting this significant variation in their amino acid composition and are generally the
+effort, particularly in cancer drug development, are the Cancer Cell Line primary determinants of binding affinity to the target antigen. When
+Encyclopedia (CCLE)33 and the Genomics of Drug Sensitivity in Cancer designing novel antibodies for a specific antigen, the typical approach is to
+(GDSC)34. CCLE provides multi-omics profiles for around 1000 cancer explore alternative CDRs that could produce a new, functional antibody
+cell lines, while GDSC offers data on the drug responses of these lines to with high binding affinity to the target41,42,46,47.
+hundreds of drugs, commonly measured using the half-maximal inhi- Recently, several deep learning methods have been developed for
+bitory concentration (IC ). Notable computational models addressed targeted antibody design, framing CDR prediction as an infilling task46–52.
+50
+this task35–37. These models predict missing CDR regions, represented by MASK
+For our study, we used three subsets of the GDSC database: GDSC1 tokens, using the amino acid sequences of both the antigen and the
+and GDSC2, available through the Therapeutics Data Commons (TDC)38, antibody’s FR regions. While prior approaches often relied on structural
+and referred to in the paper as Cancer-Drug Response 1 and Cancer-Drug data, this information is scarce and challenging to obtain53. In contrast,
+Response 2, respectively; and a subset published in36, referred to as Cancer- we fine-tune MAMMAL for the targeted antibody design task using only
+Drug Response 3. A dataset statistics table summarizing the number of cell the sequence data of the antigen and the sequence of the antibody’s FR
+lines, drugs, and cell–drug pairs is provided in Supplementary Table S3. We regions.
+used the random splits provided by TDC for Cancer-Drug Response 1 and The targeted antibody design task benchmark is based on the SAbDab
+2, while for Cancer-Drug Response 3, we followed the split methodology dataset53. Following the data processing outlined in47, we filtered out samples
+outlined in36, reserving 5% of the data for the test set, stratified by TCGA39 with missing CDRs to enable direct comparison, even though MAMMAL
+pathways associated with the cancer cell lines. supports samples that contain missing CDRs. Consistent with47, we ran-
+During fine-tuning, we used only gene-expression profiles and domly partitioned the dataset into training, validation, and test folds while
+SMILES representations of drugs, as shown in the example prompt in the ensuring that samples with similar heavy-chain third CDR (CDRH3) sub-
+Supplementary Table S1. Similar to the input format for cell type annota- sequences remained in the same fold. MAMMAL demonstrates superior
+tion, gene-expression profiles were provided as ranked lists of gene names amino acid recovery (AAR), defined as the fraction of correctly predicted
+based on their expression levels. For predicting continuous IC values, residues, across all masked CDRs (Table 1; detailed results are provided in
+50
+MAMMAL was utilized in regression mode, taking advantage of its built-in Supplementary Table S4). Notably, in CDRH3, the most variable region, it
+support for floating-point scalar predictions. Our model outperforms the exhibits a remarkable improvement of 19%.
+npj Drug Discovery | ( 2026) 3:14 4
+
+===== PAGE 5 =====
+https://doi.org/10.1038/s44386-026-00047-4 Article
+T-Cell Receptor-Epitope Binding mutant complexes, without structural information. Leveraging
+T-cell receptor (TCR) binding to immunogenic peptides (epitopes) pre- MAMMAL–s support for continuous-valued outputs, we formulate ΔΔG
+sented by major histocompatibility complex molecules is a critical prediction as a regression task. Performance results are reported in Table 1.
+mechanism in the adaptive immune system, essential for antigen recogni- Our model achieves an average Pearson correlation of 0.852, substantially
+tion and triggering immune responses. The TCR repertoire exhibits con- exceeding the previous sequence-only state of the art (0.663), and remains
+siderable diversity, consisting of an α-chain and a β-chain that function competitive with structure-based methods, falling only 1.6% short of the
+together to enable T cells to recognize a wide array of epitopes. The β-chain reported best performance of 0.86656.
+is especially significant, as it is crucial for the early stages of T-cell devel-
+opment and possesses greater variability, which enhances the TCR’s capa- Drug-Target Interaction
+city to identify diverse pathogens effectively. However, understanding the Predicting drug-target binding affinity plays a crucial role in the early stages
+specific interactions between TCRs and epitopes remains a significant of drug discovery. Traditionally, binding affinities are measured through
+challenge due to the vast variability in TCR sequences. Accurate prediction high-throughput screening experiments, which, while accurate, are
+of TCR-peptide binding from sequence data would advance immunology resource-intensive and limited in their scalability to evaluate large sets of
+by offering deeper insights into a patient’s immune status and disease his- drug candidates. In this task, we focus on predicting binding affinities using
+tory. This capability holds potential applications in personalized immu- pK , the negative logarithm of the dissociation constant, which reflects the
+D
+notherapy, early diagnosis, and the treatment of diseases such as cancer and strength of the interaction between a small molecule (drug) and a protein
+autoimmune disorders. In silico tools designed to model TCR-peptide (target). We utilize the PEER (Protein sEquence undERstanding)
+interactions could facilitate the study of therapeutic T-cell efficacy and assess benchmark60 for DTI prediction. This benchmark leverages data from the
+cross-reactivity risks, presenting an opportunity for precision medicine. BindingDB dataset61, with a specific test split that holds out four protein
+We evaluated the model on the task of predicting TCR-epitope binding classes - estrogen receptor, G-protein-coupled receptors, ion channels, and
+from sequence data using the Weber benchmark (ref. 54, https:// receptor tyrosine kinases - for assessing generalization performance on
+tdcommons.ai/multi_pred_tasks/tcrepitope), which consists of 47,182 unseen classes.
+TCR β-chain epitope pairs. This dataset covers 192 distinct epitopes and For model fine-tuning, we conducted hyperparameter optimization,
+includes 23,139 unique TCR β-chain sequences, with 50% of the pairs selecting an initial learning rate of 0.0004, with no dropout and no weight
+serving as negative samples created by randomly pairing TCR sequences decay. We standardized the pK values based on the mean and standard
+D
+with epitopes they are not known to bind with. The dataset also includes the deviation of the training set. For evaluation, we transformed the predicted
+CDR3 subsequence for each TCR β-chain, the most hypervariable region of values back to their original scale. Our model achieves an average NRMSE of
+the chain. We used 10-fold cross-validation. The folds were pre-defined in 54. 0.906 (Table 1), demonstrating a solid improvement of 3.8% over the SOTA
+Fine-tuning involved three concurrent tasks: TCR β-chain mask infilling reported by60.
+and two classification tasks: (i) TCR β-chain epitope binding prediction and
+(ii) TCR β-chain -CDR3 epitope binding prediction. Here, we report the Antibody-Antigen Binding Prediction
+performance only for the TCR β-chain epitope binding prediction task. Our Accurate prediction of antigen-antibody binding can enhance the design
+model achieves an average AUROC of 0.879 (Table 1), representing a sta- and optimization of therapeutic antibodies, leading to improved efficacy
+tistically significant improvement of 2% over the SOTA, as our result falls and specificity. We employ the human epidermal growth factor receptor
+outside the SOTA’s confidence interval. 2 (HER2) dataset62 as a benchmark for predicting antibody-antigen
+binding. HER2 is a key target for certain types of breast and stomach
+Protein-Protein Interaction - ΔΔG Prediction cancers. The dataset includes variations of the clinically approved ther-
+An important factor in drug design is binding affinity, commonly measured apeutic antibody trastuzumab and their corresponding affinities for the
+by the equilibrium dissociation constant, K , which is related to the Gibbs HER2 antigen. The dataset comprises 8,935 binding and 25,114 non-
+D
+free energy ΔG through the equation binding trastuzumab CDR H3 mutants, each with up to 10 mutations,
+following de-duplication and the removal of samples labeled as both
+ΔG ¼ kT lnðK Þ; ð1Þ binding and non-binding.
+D
+For the most accurate comparison with the SOTA (refs. 62,63), the
+where k is the Boltzmann constant and T is the temperature55. HER2 dataset was divided into train (70%), validation (15%) and test (15%)
+The effect of introducing mutations into a protein–protein complex is sets. For increased robustness, the train set was further divided into 5 folds.
+commonly quantified by the change in binding free energy relative to the The reported results are from the 5 models trained on different train folds,
+reference (wild-type) complex. This mutation-induced effect is captured by and evaluated on the test set.
+the difference in Gibbs free energy, defined as Finetuning involved feeding the target antigen sequence as well as the
+entire heavy-chain variable region as input and predicting binding to the
+ΔΔG ¼ ΔG
+mutant
+(cid:2) ΔG
+wild(cid:2)type
+: target sequence. Our model achieves an average AUROC of 0.928 (Table 1),
+slightly surpassing the SOTA, which incorporated structural data, unlike
+By subtracting the wild-type free energy, ΔΔG isolates the energetic our model.
+contribution of the mutation itself. As a result, ΔΔG provides a direct
+measure of whether a mutation stabilizes or destabilizes binding and is a Comparison of AlphaFold 3 and MAMMAL in Predicting
+standard target in studies of mutational effects on protein–protein Antibody-Antigen and Nanobody-Antigen Binding
+interactions56–58. Accurate prediction of antibody-antigen and nanobody-antigen interac-
+The SKEMPI dataset55 provides experimentally measured changes in tions is essential for evaluating therapeutic efficacy and guiding protein
+thermodynamic parameters, including ΔG and kinetic rate constants, for engineering. Although AlphaFold 3 (AF3) is not explicitly designed as a
+mutations in protein–protein complexes with known structures in the binary protein-protein interaction (PPI) classifier, binding likelihood can be
+Protein Data Bank59. This dataset is widely used to benchmark methods for inferred from structure-derived confidence scores, such as predicted tem-
+predicting mutation-induced changes in binding affinity, particularly ΔΔG. plate modeling (pTM) and interface predicted template modeling (ipTM),
+A commonly used subset of SKEMPI comprising 1131 single-point muta- computed from predicted protein-protein complexes. These confidence
+tions (S1131) is adopted as our benchmark. Following standard practice, we scores are derived from structural predictions rather than classification
+report 10-fold cross-validation performance on this subset. The input for objectives. Recent studies suggest that these scores correlate with true
+our model consists solely of amino acid sequences for the wild-type and binding events64,65.
+npj Drug Discovery | ( 2026) 3:14 5
+
+===== PAGE 6 =====
+https://doi.org/10.1038/s44386-026-00047-4 Article
+Fig. 2 | AF3-predicted nanobody binding poses on HER2 and TBG. a HER2 performance on this target (AUROC = 0.45). b Thyroxine-binding globulin (TBG)
+extracellular domain (ECD) structure with representative AF3-predicted complexes structure with AF3-predicted complexes for binding and non-binding VHHs. In
+for a binder and a non-binder. The FDA-approved therapeutic antibodies trastu- contrast to HER2, AF3 predicts distinct binding poses for binders versus non-
+zumab (blue) and pertuzumab (purple) are shown for reference. AF3 predicts both binders on TBG, consistent with its strong discriminative performance on this target.
+binders and non-binders engaging the same region of the HER2 ECD, which is Visualizations were generated using PyMOL.
+distinct from the known therapeutic epitopes, consistent with its poor discriminative
+Accordingly, we conduct an exploratory comparison between AF3- Discussion
+derived confidence scores and a fine-tuned MAMMAL model for distin- Recent progress in biomedical foundation models has enabled substantial
+guishing binders from non-binders. We emphasize that AF3 provides yet largely domain-specific advances across cellular and molecular biology.
+detailed 3D structural hypotheses, whereas MAMMAL is a sequence-only Specialized model classes-including RNA expression-based models26,28,30,
+model that produces probabilistic binding predictions; the comparison is protein language models67,68, and frameworks for small-molecule-protein
+intended to assess relative discriminative power for binding prediction interaction modeling32-provide increasingly detailed representations of
+rather than to equate the underlying modeling approaches. biological systems. Together, these efforts suggest the feasibility of inte-
+We first evaluated the extracellular domain (ECD) of HER2, a well- grative frameworks such as the proposed AI-enabled “virtual cell”69,70.
+characterized therapeutic antigen with experimentally validated binding Realizing this vision, however, requires approaches that can coherently align
+epitopes. We used the HER2-specific MAMMAL model described in heterogeneous biological modalities within a scalable and unified
+Subsection 2.9. Due to the computational demands and limited availability representation.
+of AF3, the HER2 benchmark test set was downsampled to 60 examples, MAMMAL advances this goal by reframing diverse biological tasks as
+comprising 30 binders and 30 non-binders. The HER2-specific MAMMAL sequence-to-sequence problems and introducing design choices tailored to
+model demonstrates strong discriminative performance, achieving an drug discovery applications. Its multi-domain syntax and extensible toke-
+AUROC of 0.88. In contrast, AF3 exhibits no meaningful separation nizer allow heterogeneous biological inputs and outputs to be expressed
+between binders and non-binders (AUROC = 0.45), and the difference in within a shared sequence representation. The implementation of con-
+performance between the two models is highly significant (DeLong test, P = tinuous embeddings for numerical variables preserves quantitative preci-
+1.5 × 10−6). Structural analysis further reveals that AF3-predicted binding sion without the information loss typical of discretization, facilitating
+sites are indistinguishable between binders and non-binders and deviate integration of biochemical and pharmacological measurements. MAM-
+from the known epitopes of the FDA-approved antibodies trastuzumab and MAL further supports both encoder-only and encoder-decoder config-
+pertuzumab (Fig. 2a). An extended comparative analysis of MAMMAL urations, offering the architectural flexibility required to address the broad
+(pre-trained and fine-tuned) and AF3 is provided in Supplementary Table spectrum of predictive and generative tasks encountered throughout the
+S5. This includes several AF3 confidence-score variants, using ipTM - and drug discovery pipeline. The strong performance of fine-tuned models
+pTM-based scoring, and heavy-chain-only and heavy+light-chain input across multiple domains and stages highlights the practical utility of this
+configurations. unified framework in established in silico benchmarks.
+Next, we evaluated nanobody binding across six structurally diverse In addition to benchmark evaluations, MAMMAL was assessed in real-
+antigen targets: albumin, mannose receptor (CD206), epidermal growth world settings, where it accurately predicted the relative potency ranking of
+factor receptor (EGFR), thyroxine-binding globulin (TBG), tumor necrosis four drugs, including Carfilzomib40, a proteasome inhibitor approved only
+factor alpha (TNFα), and von Willebrand factor (VWF). Binding nano- for hematological malignancies, across solid tumor cell lines. Wet-lab
+bodies were collected from SAbDab-nano66, patents, and proprietary validation using the same CellTiter-Glo assay protocol as GDSC confirmed
+datasets. Non-binders consisted of nanobodies experimentally confirmed as the predicted ordering. This result demonstrates the model’s capacity to
+non-binding in phage-display library screenings, as well as nanobodies generalize to novel compounds and identify potentially repurposable agents
+targeting unrelated antigens. From a total of 668 nanobody–antigen pairs for indications beyond their current approval. In parallel, MAMMAL has
+(131 binders and 537 non-binders), we selected 475 sequences (64 binders been employed in joint studies with academic and industry collaborators,
+and 411 non-binders) for MAMMAL fine-tuning and reserved including a published investigation supporting its ability to predict antibody
+193 sequences (67 binders and 126 non-binders) for held-out evaluation. A activity against influenza hemagglutinin proteins71. Additional collaborative
+single MAMMAL model was fine-tuned on training data comprising bin- studies involving prospective wet-lab validation of MAMMAL-guided
+ders and non-binders across all targets, and subsequently evaluated sepa- predictions are currently in progress, further evaluating the framework
+rately on the test subset corresponding to each target, with performance across diverse biological and therapeutic contexts.
+compared against AF3 confidence scores computed on the same samples. We further evaluated MAMMAL for antibody binder versus non-
+Test set statistics and per-target MAMMAL and AF3 performance are binder identification and compared it to AlphaFold 3 (AF3), which has
+summarized in Table 2. Additional performance metrics for MAMMAL recently been explored as a proxy for estimating binding propensity via
+and AF3 are presented in Supplementary Tables S6–S7. As shown, predicted interfaces64,65. Fine-tuned MAMMAL achieved robust dis-
+MAMMAL significantly outperforms AF3 on the larger targets: albumin, criminative performance across six of seven antigens-including flexible,
+CD206, EGFR, and VWF. In contrast, AF3 achieves superior performance glycosylated, and multi-domain targets such as CD206, EGFR, HER2,
+on the smaller TBG target, and analysis of the predicted structures highlights albumin, and VWF-with AUROCs ranging from 0.83 to 1.00. In contrast,
+distinct binding sites for binders versus non-binders (Fig. 2b and Supple- AF3, applied in a zero-shot setting, showed limited ability to separate bin-
+mentary Figure S4). For the smallest protein, TNFα, the two models exhibit ders from non-binders for most targets (AUROC ≤ 0.59), performing well
+comparable performance. only on the rigid globular antigen TBG and matching MAMMAL on TNFα.
+npj Drug Discovery | ( 2026) 3:14 6
+
+===== PAGE 7 =====
+https://doi.org/10.1038/s44386-026-00047-4 Article
+These limitations may reflect AF3’s bias toward true-positive PDB com- framework88 while introducing several key modifications on top of it. This
+plexes, its lack of explicit negative supervision, and its reliance on a single design conceptualizes tasks as sequence-to-sequence problems within a
+static conformation. As a result, AF3 struggles with proteins containing unified model, introducing three key features:
+(cid:129)
+heterogeneous or intrinsically disordered regions (IDRs), which comprise Optimized for Representation and Generation Tasks: Biomedical
+30–40% of the human proteome and are known to challenge structure- models for drug discovery must perform diverse tasks, ranging from
+based models72, including IDR-rich therapeutic targets such as EGFR73 and token-level or prompt-level representation to tasks requiring strong
+HER274. In contrast, protein language models (PLMs) such as MAMMAL generative capabilities. For instance89, introduced a non-causal,
+better capture the statistical properties of IDRs, consistent with observations decoder-only protein language model optimized for both under-
+that pLM-based approaches perform well on IDR-related benchmarks75. standing and generating protein-related data, outperforming state-of-
+These factors together likely contribute to MAMMAL’s improved robust- the-art baselines. MAMMAL is designed to jointly optimize for such
+ness for binder identification across therapeutically relevant targets. diverse tasks, enabling the model to learn from multiple stages of the
+Text-based large language models excel at understanding and rea- drug discovery pipeline. This collective learning is facilitated by a
+soning over human language and have been adapted to the biomedical shared encoder, which bridges gaps between distinct AI applications in
+domain through pretraining on PubMed abstracts and full-text articles. drug discovery. Specifically, MAMMAL supports both encoder-only
+However, these models operate primarily on unstructured text and do not and encoder-decoder autoregressive modes. Encoder-only mode excels
+explicitly represent structured biological modalities. In a comparison with in representation-heavy tasks, such as classification and regression,
+BioMedLM76, reported in the Supplementary Information, MAMMAL while encoder-decoder mode is better suited for generative tasks. By
+outperformed text-only models on tasks involving proteins and gene sharing encoder stack weights across these modes, MAMMAL
+expression data, highlighting the limitations of language-only pretraining facilitates efficient multi-task training, with parameter updates
+for biological data lying outside natural language, such as protein sequences conducted through gradient accumulation across all tasks.
+(cid:129)
+and gene expression measurements. Beyond text-based LLMs, prior work Flexible Multi-Domain Structured Prompts: Drug discovery tasks
+includes graph neural networks, which encode molecular, protein, and often require prompts that describe molecular complexes composed of
+biological-system topology and can directly represent knowledge graphs77. multiple entities. These prompts may also include attributes related to
+While sequence-based representations can implicitly capture aspects of the entire complex or specific internal entities to improve prediction
+three-dimensional structure78, explicitly modeling 3D information can accuracy. To address this, MAMMAL employs a modular tokenizer
+further improve performance, motivating sequence models that input or that enables multi-domain structured prompts by assigning distinct
+generate structural representations79–81. More recently, diffusion models sub-tokenizers to each entity type. Compared to free-text prompts,
+have emerged as powerful methods for modeling molecules and proteins structured prompts provide a consistent and explicit representation of
+directly in continuous atomic coordinate space24,82–84. In contrast to these input data, capturing relationships and attributes between entities, and
+architecture- or modality-specific approaches, MAMMAL adopts a unify- facilitating the training. While MAMMAL primarily focuses on
+ing sequence-to-sequence abstraction that decouples task definition from structured input, incorporating free text as an additional data source
+architectural design. A key open challenge is how to combine this simplicity represents a natural extension. Recent advancements in biomedical
+and flexibility with the expressive power of specialized models, particularly large language models90–92, demonstrate the potential of free-text
+diffusion-based architectures that excel at high-fidelity structural prompts to enhance versatility and expand training datasets. Such
+generation. integration could integrate free text directly, mix it with structured
+The growing adoption of agentic workflows-leveraging LLMs and prompts, or leverage embeddings derived from extensively pre-trained
+specialized agents to automate and accelerate discovery processes-marks a text models93, https://github.com/ibm-granite/granite-3.0-language-
+broader shift in biomedical research practice85,86. Fine-tuned MAMMAL models/. These embeddings could harness the latent knowledge
+models integrate naturally into this paradigm, providing modular, task- encoded within external models to enrich the system’s performance.
+specific components that support scalable and efficient discovery workflows. (cid:129) Numerical Values Integration: A notable innovation of MAMMAL is
+Fair and meaningful comparisons across biomedical models require its native support for numerical values (e.g., 2, 3.14, 10,000.1) as both
+benchmarks with accessible datasets, reproducible data splits, and clear inputs and outputs. Numerical data is crucial for modeling drug dis-
+evaluation protocols. Although the benchmarks used here satisfy these covery tasks and allows for direct representation of important attri-
+criteria and span multiple stages of the drug discovery pipeline, our eva- butes. This capability expands the range of tasks MAMMAL can
+luation is limited to models that publicly report results on these tasks, and handle, such as binding affinity prediction and protein folding. Many
+claims of state-of-the-art performance should therefore be interpreted biomedical large language models either lack support for numerical
+within this scope. Continued development of open benchmarks and models data90, employ limited solutions such as binning92, or rely on digit-
+is essential for advancing robust and generalizable approaches for drug based representations91, which can inflate input length94, offer
+discovery. We invite the community to evaluate their own models under this compelling digit-based approach of splitting the number into semantic
+benchmark suite and to explore MAMMAL on new datasets and tasks. parts (mainly digits), supporting arbitrary scalar values while adding
+only a limited number of tokens to the vocabulary. While this simplifies
+Methods integration with standard language models, it inflates the number of
+The MAMMAL method is built around three core components: The model input/output tokens significantly. This is especially evident in tasks like
+architecture, the molecular prompt syntax, and extensive pretraining. In gene expression prediction which require supporting thousands of
+Subsection 4.1, we detail the architecture and its enhancements to the scalars in a single prompt and expected model output95, suggests a new
+standard transformer. loss term that considers numerical proximity, with the main advantage
+Subsections 4.2 and 4.3 focus on the molecular representations and of not requiring any additional prediction head for scalars, allowing to
+prompt syntax, key features that enable the support of a diverse range of introduce numerical values support within existing language model
+pretraining and downstream tasks for drug discovery. Finally, Subsection architectures. However, it is currently limited to a fixed vocabulary, not
+4.4 outlines the pretraining process, which facilitates leveraging large, cross- allowing support for arbitrary (possibly unseen in train time) scalar
+domain datasets and handling multiple entities simultaneously. values. Other methods, such as discretization, demonstrated in81
+through pre-trained VQ-VAE96 that encodes and decodes 3D spatial
+MAMMAL Architecture positions, represent another approach limited to a specific use case.
+The MAMMAL architecture builds upon the transformer architecture MAMMAL, however, integrates continuous numerical values directly
+introduced by Vaswani et al.87 and draws inspiration from the T5 into its embedding space via a projection layer. The resulting
+npj Drug Discovery | ( 2026) 3:14 7
+
+===== PAGE 8 =====
+https://doi.org/10.1038/s44386-026-00047-4 Article
+Table 3 | Pretraining Tasks
+Name Domain Entity Type Task Type Dataset Number of Samples
+Protein LM Biologic General Protein Spans Masking LM Uniref9067 180M
+Antibody LM Biologic Antibody Spans Masking LM OAS98 650M
+Small Molecule LM Small Molecules Small Molecule Spans Masking LM ZINC100 + PubChem101 200M
+Cell Genes LM Single Cell Transcript- omics Cell Genes Spans Masking LM CELLxGENE103 30M
+Protein-Protein Interaction Biologic General Protein Classification STRING102 780M
+Protein-Protein Biologic General protein Generation STRING102 390M
+Interaction Gen.
+Antibody Denoise Biologic Antibody Denoise Sequence OAS98 650M
+Details on the pretraining tasks that were used while training ibm/biomed.omics.bl.sm.ma-ted-458m. “Number of Samples” lists the post-filtering number of samples actually used. A single model
+was pretrained with all of the listed tasks, accumulating knowledge spanning multiple domains.
+embeddings align with the input token embeddings, ensuring simple, Pretraining
+efficient, and effective utilization of numerical data. MAMMAL is designed as a comprehensive foundation model, capable of
+spanning multiple domains and accommodating a variety of entities. It is
+Further details about the MAMMAL architecture can be found in intended to support diverse task types, ranging from representation-focused
+Supplementary Figure S1. tasks to generation-oriented ones. To achieve this, MAMMAL is trained on
+multiple tasks concurrently. Pretraining was conducted on two billion
+Entity Representation samples sourced from six datasets, which are all publicly available, covering
+Each entity domain supported by MAMMAL makes use of a representation three distinct domains across seven tasks. Table 3 summarizes these tasks,
+approach that has been selected as follows: detailing the relevant domains, entity types, and specific datasets. Additional
+(cid:129) Small Molecules. Represented using SMILES sequences (Simplified details about the pretraining are provided in the Supplementary
+Molecular Input Line Entry System). For example, paracetamol is Information.
+represented as CC(=O)NC1=CC=C(O)C=C1.
+(cid:129) Gene Expression. Represented as an ordered list of gene names, sorted Data availability
+in descending order based on log-normalized and binned expression All datasets used in this study are publicly available. Cell Type. The
+values. In case of ties, genes are sorted alphabetically. This Zheng68k dataset was obtained from https://www.10xgenomics.com/
+representation applies to both single-cell and bulk RNA datasets/fresh-68-k-pbm-cs-donor-a-1-standard-1-1-0(file: https://cf.
+expression data. 10xgenomics.com/samples/cell-exp/1.1.0/fresh_68k_pbmc_donor_a/
+(cid:129) Proteins. Represented as concatenated amino acid chains, preserving fresh_68k_pbmc_donor_a_filtered_gene_bc_matrices.tar.gz) BBBP and
+original source-data order. This representation contains only sequence ClinTox benchmarks were obtained from https://github.com/IBM/
+data, without structural information. molformer/tree/main/datathat points to https://ibm.ent.box.com/v/
+(cid:129) Antibodies. Represented similarly to proteins, using concatenated MoLFormer-data(file: finetune_datasets.zip). Cancer-Drug
+amino acid sequences. Each chain is prefixed with a token indicating its Response 1 and 2. The GDSC1 and GDSC2 benchmarks were acces-
+type (heavy or light). sed with random splits from the TDC library (https://pypi.org/project/
+PyTDC/). Cancer-Drug Response 3. The benchmark was obtained from
+Prompt Syntax the DeepCDR36 git repository (https://github.com/kimmo1019/
+The prompt syntax is built around a modular tokenizer architecture DeepCDR/tree/master/data). DTI. This benchmark was published by60
+that governs how molecular data is interpreted and encoded. At its and is available in https://torchdrug.ai/docs/api/datasets.html#bindingdb
+core, the tokenizer defines a common syntax using special tags that Ab Infilling. This data was taken from47, which provides a preprocessed
+represent molecular entities, sequences, attributes, and interactions subset of the publicly available SAbDab database53. The preprocessing
+across diverse molecular systems. It supports multi-domain inputs by pipeline includes a similarity-based clustering for the data splits and
+delegating different segments of the input sequence to specialized sample-level filtering that excludes samples considered invalid in47. For
+sub-tokenizers, each responsible for handling a specific data type or additional information, we refer to47 and the publicly available codebase:
+modality. https://github.com/THUNLP-MT/dyMEAN. PPIΔΔG. The SKEMPI
+All sub-tokenizers operate under the umbrella of the main tokenizer S1131 dataset of non-redundant single mutations was derived from
+and share access to a unified set of special tokens, such as 〈EOS〉, ensuring SKEMPI55 in97 and can be downloaded from https://zhanggroup.org/
+consistency across domains. Among these sub-tokenizers, a designated BindProfX/download/. TCR Bind The Weber TCR binding dataset was
+numeric sub-tokenizer is used for handling continuous values. Instead of downloaded from https://tdcommons.ai/multi_pred_tasks/
+tokenizing numeric values into discrete tokens, this sub-tokenizer projects tcrepitopeAntibody-Antigen Bind The HER2 antibody-antigen bind-
+them directly into the model’s embedding space via a learned ing dataset was taken from the original paper62 github repository https://
+projection layer. github.com/dahjan/DMS_opt. Pretraining. The ibm/biomed.o-
+The prompt syntax applies uniformly to both inputs and outputs of the mics.bl.sm.ma-ted-458m was pre-trained over OAS98, UniProt99,
+model. It is also designed to be extensible: New tags can be introduced into Zinc100, PubChem101, STRING102 and CELLxGENE103. Supplementary
+individual sub-tokenizers or added to the shared token set without dis- Information describes the pre-processing steps applied.
+rupting existing functionality. Thanks to this modular structure, updates to
+domain-specific sub-tokenizers or the token vocabulary maintain backward Code availability
+compatibility, enabling interoperability between newly trained and pre- The model architecture, fine-tuning framework, and end-to-end examples
+viously deployed models. More detailed explanations and examples of the are publicly available at: https://github.com/BiomedSciAI/biomed-multi-
+prompt syntax can be found in Supplementary Figures S2, S3 and Supple- alignment. This GitHub repository provides comprehensive resources for
+mentary Table S1. working with the model, including setup instructions, fine-tuning
+npj Drug Discovery | ( 2026) 3:14 8
+
+===== PAGE 9 =====
+https://doi.org/10.1038/s44386-026-00047-4 Article
+guidelines, and inference workflows for multiple downstream tasks. Pre- 19. Swanson, K. et al. Generative ai for designing and validating easily
+trained model weights and the associated tokenizer are hosted on the synthesizable and structurally novel antibiotics. Nat. Mach. Intell. 6,
+Hugging Face Model Hub and can be accessed at: https://huggingface.co/ 338–353 (2024).
+ibm/biomed.omics.bl.sm.ma-ted-458m. Additionally, selected fine-tuned 20. Athaya, T., Ripan, R. C., Li, X. & Hu, H. Multimodal deep learning
+model checkpoints and tokenizers are available via: https://huggingface.co/ approaches for single-cell multi-omics data integration. Brief.
+models?other=base_model:finetune:ibm-research/biomed.omics.bl.sm. Bioinforma. 24, bbad313 (2023).
+ma-ted-458m, and can be explored interactively through the Hugging Face 21. Szałata, A. et al. Transformers in single-cell omics: a review and new
+Space at: https://huggingface.co/spaces/ibm/biomed-multi-alignment. perspectives. Nat. methods 21, 1430–1443 (2024).
+22. Jumper, J. et al. Highly accurate protein structure prediction with
+Received: 2 September 2025; Accepted: 23 February 2026; AlphaFold. Nature 596, 583–589 (2021).
+23. Evans, R. et al. Protein complex prediction with alphafold-multimer.
+bioRxiv https://www.biorxiv.org/content/early/2022/03/10/2021.
+References 10.04.463034 (2022).
+1. Cheng, F. et al. Artificial intelligence and open science in discovery of 24. Abramson, J. et al. Accurate structure prediction of biomolecular
+disease-modifying medicines for Alzheimer’s disease. Cell Rep. interactions with AlphaFold 3. Nature 630, 493–500 (2024).
+Med. 5, 101379 (2024). 25. Qi, R., Ma, A., Ma, Q. & Zou, Q. Clustering and classification methods
+2. Mullard, A. Parsing clinical success rates. Nat. Rev. Drug Discov. 15, for single-cell rna-sequencing data. Brief. Bioinforma. 21,
+447–448 (2016). 1196–1208 (2020).
+3. Paul, S. M. et al. How to improve r&d productivity: the 26. Cui, H. et al. scgpt: toward building a foundation model for single-cell
+pharmaceutical industry’s grand challenge. Nat. Rev. Drug Discov. multi-omics using generative AI. Nat. Methods 1–11 (2024).
+9, 203–214 (2010). 27. Xu, J., Zhang, A., Liu, F., Chen, L. & Zhang, X. Ciform as a
+4. DiMasi, J. A., Grabowski, H. G. & Hansen, R. W. Innovation in the transformer-based model for cell-type annotation of large-scale
+pharmaceutical industry: new estimates of r&d costs. J. Health Econ. single-cell rna-seq data. Brief. Bioinforma. 24, bbad195 (2023).
+47, 20–33 (2016). 28. Yang, F. et al. scbert as a large-scale pretrained deep language
+5. Wouters, O. J., McKee, M. & Luyten, J. Estimated research and model for cell type annotation of single-cell rna-seq data. Nat. Mach.
+development investment needed to bring a new medicine to market, Intell. 4, 852–866 (2022).
+2009-2018. Jama 323, 844–853 (2020). 29. Zheng, G. X. et al. Massively parallel digital transcriptional profiling of
+6. Southey, M. W. & Brunavs, M. Introduction to small molecule drug single cells. Nat. Commun. 8, 14049 (2017).
+discovery and preclinical development. Front. Drug Discov. 3, 30. Theodoris, C. V. et al. Transfer learning enables predictions in
+1314077 (2023). network biology. Nature 618, 616–624 (2023).
+7. Lu, R.-M. et al. Development of therapeutic antibodies for the 31. Wu, Z. et al. Moleculenet: a benchmark for molecular machine
+treatment of diseases. J. Biomed. Sci. 27, 1–30 (2020). learning. Chem. Sci. 9, 513–530 (2018).
+8. Sadybekov, A. V. & Katritch, V. Computational approaches 32. Ross, J. et al. Large-scale chemical language representations
+streamlining drug discovery. Nature 616, 673–685 (2023). capture molecular structure and properties. Nat. Mach. Intell. 4,
+9. Huang, D., Yang, M., Wen, X., Xia, S. & Yuan, B. Ai-driven drug 1256–1264 (2022).
+discovery: Accelerating the development of novel therapeutics in 33. Barretina, J. et al. The cancer cell line encyclopedia enables
+biopharmaceuticals. J. Knowl. Learn. Sci. Technol. ISSN: 2959- predictive modelling of anticancer drug sensitivity. Nature 483,
+6386 (online) 3, 206–224 (2024). 603–607 (2012).
+10. Son, A. et al. Revolutionizing molecular design for innovative 34. Yang, W. et al. Genomics of drug sensitivity in cancer (gdsc): a
+therapeutic applications through artificial intelligence. Molecules 29, resource for therapeutic biomarker discovery in cancer cells. Nucleic
+4626 (2024). acids Res. 41, D955–D961 (2012).
+11. Baslan, T. & Hicks, J. Unravelling biology and shifting paradigms in 35. Lind, A. P. & Anderson, P. C. Predicting drug activity against cancer
+cancer with single-cell sequencing. Nat. Rev. Cancer 17, 557–569 cells by random forest models based on minimal genomic
+(2017). information and chemical properties. PloS one 14, e0219774
+12. Ofengeim, D., Giagtzoglou, N., Huh, D., Zou, C. & Yuan, J. Single-cell (2019).
+rna sequencing: unraveling the brain one cell at a time. Trends Mol. 36. Liu, Q., Hu, Z., Jiang, R. & Zhou, M. Deepcdr: a hybrid graph
+Med. 23, 563–576 (2017). convolutional network for predicting cancer drug response.
+13. Rozenblatt-Rosen, O., Stubbington, M. J., Regev, A. & Teichmann, Bioinformatics 36, i911–i918 (2020).
+S. A. The human cell atlas: from vision to reality. Nature 550, 451–453 37. Liu, X. et al. Graphcdr: a graph neural network method with
+(2017). contrastive learning for cancer drug response prediction. Brief.
+14. Potter, S. S. Single-cell rna sequencing for the study of Bioinforma. 23, bbab457 (2022).
+development, physiology and disease. Nat. Rev. Nephrol. 14, 38. Huang, K. et al. Therapeutics Data Commons: Machine learning
+479–492 (2018). datasets and tasks for drug discovery and development. Adv. Neural
+15. Van de Sande, B. et al. Applications of single-cell rna sequencing in Inform. Processing Syst. (NeurIPS), Track on Datasets and
+drug discovery and development. Nat. Rev. Drug Discov. 22, Benchmarks (2021).
+496–520 (2023). 39. Weinstein, J. N. et al. The Cancer Genome Atlas Pan-Cancer
+16. Dann, E. et al. Estimating the impact of single-cell rna sequencing of Analysis Project. Nat. Genet. 45, 1113–1120 (2013).
+human tissues on drug target validation. medRxiv https://www. 40. Kortuem, K. M. & Stewart, A. K. Carfilzomib. Blood, J. Am. Soc.
+medrxiv.org/content/early/2024/10/22/2024.04.04.24305313 Hematol. 121, 893–897 (2013).
+(2024). 41. Hummer, A. M., Abanades, B. & Deane, C. M. Advances in
+17. Tang, X. et al. A survey of generative ai for de novo drug design: new computational structure-based antibody design. Curr. Opin. Struct.
+frontiers in molecule and protein generation. Brief. Bioinforma. 25, Biol. 74, 102379 (2022).
+bbae338 (2024). 42. Chiu, M., Goulet, D., Teplyakov, A. & Gilliland, G. Antibody structure
+18. Shanehsazzadeh, A. et al. Unlocking de novo antibody design with and function: the basis for engineering therapeutics. Antibodies
+generative artificial intelligence. bioRxiv 2023–01 (2023). (Basel) 8 4), (2019).
+npj Drug Discovery | ( 2026) 3:14 9
+
+===== PAGE 10 =====
+https://doi.org/10.1038/s44386-026-00047-4 Article
+43. Basu, K., Green, E. M., Cheng, Y. & Craik, C. S. Why recombinant 65. Yin, R. & Pierce, B. G. Evaluation of alphafold antibody-antigen
+antibodies - benefits and applications. Curr. Opin. Biotechnol. 60, modeling with implications for improving predictive accuracy.
+153–158 (2019). Protein Sci. 33, e4865 (2024).
+44. Carter, P. J. & Lazar, G. A. Next generation antibody drugs: pursuit 66. Schneider, C., Raybould, M. I. J. & Deane, C. M. Sabdab in the age of
+of the’high-hanging fruit’. Nat. Rev. Drug Discov. 17, 197–223 biotherapeutics: updates including sabdab-nano, the nanobody
+(2018). structure tracker. Nucleic Acids Res. 50, D1368–D1372 (2021).
+45. Beck, A., Goetsch, L., Dumontet, C. & Corvaía, N. Strategies and 67. Consortium, T. U. UniProt: the Universal Protein Knowledgebase in
+challenges for the next generation of antibody–drug conjugates. Nat. 2023. Nucleic Acids Res. 51, D523–D531 (2022).
+Rev. Drug Discov. 16, 315–337 (2017). 68. Madani, A. et al. Progen: Language modeling for protein generation.
+46. Saka, K. et al. Antibody design using lstm based deep generative arXiv preprint arXiv:2004.03497 (2020).
+model from phage display library for affinity maturation. Sci. Rep. 11, 69. Bunne, C. et al. How to build the virtual cell with artificial intelligence:
+5852 (2021). Priorities and opportunities. Cell 187, 7045–7063 (2024).
+47. Kong, X., Huang, W. & Liu, Y. End-to-End Full-Atom Antibody 70. Song, L., Segal, E. & Xing, E. Toward ai-driven digital organism:
+Design. Proc. Intl. Conf. on Mach. Learn. (ICML), 202, 17409–17429 Multiscale foundation models for predicting, simulating and
+(2023). programming biology at all levels. arXiv preprint arXiv:2412.06993
+48. Jin, W., Wohlwend, J., Barzilay, R. & Jaakkola, T. Iterative refinement (2024).
+graph neural network for antibody sequence-structure co-design. 71. Barkan, E. et al. Leveraging large language models to predict
+arXiv preprint arXiv:2110.04624 (2021). antibody biological activity against influenza A hemagglutinin.
+49. Jin, W., Barzilay, R. & Jaakkola, T. Antibody-Antigen Docking and Computational Struct. Biotechnol. J. 27, 1286–1295 (2025).
+Design via Hierarchical Structure Refinement. Proc. 39th Intl. Conf. 72. Gopalan, S. & Narayanan, S. Hallucinations in alphafold3 for
+on Mach. Learn. (ICML), 162, 10217–10227 (PMLR, 2022). intrinsically disordered proteins with disorder in biological process
+50. Luo, S. et al. Antigen-specific antibody design and optimization with residues. arXiv preprint arXiv:2510.15939 (2025).
+diffusion-based generative models for protein structures. Adv. 73. Thomas, S. D. et al. Impact of intrinsically disordered regions and
+Neural Inf. Process. Syst. 35, 9754–9767 (2022). functional disorder hotspots in the human kinome. Brief. Bioinforma.
+51. Kong, X., Huang, W. & Liu, Y. Conditional antibody design as 3d 26, bbaf662 (2025).
+equivariant graph translation. arXiv preprint arXiv:2208.06073 74. Pinet, L. et al. Structural and dynamic characterization of the
+(2022). c-terminal tail of ErbB2: Disordered but not random. Biophysical J.
+52. Zhou, X. et al. Antigen-specific antibody design via direct energy- 120, 1869–1882 (2021).
+based preference optimization. Adv. Neural Inform. Processing Syst. 75. Mehdiabadi, M. et al. Critical assessment of protein intrinsic disorder
+(NeuRIPS), 37, 120861–120891 (2024). round 3-predicting disorder in the era of protein language models.
+53. Dunbar, J. et al. Sabdab: the structural antibody database. Nucleic Proteins: Struct., Funct., Bioinforma. 94, 414–424 (2026).
+acids Res. 42, D1140–D1146 (2014). 76. Bolton, E. et al. Biomedlm: A 2.7 b parameter language model trained
+54. Weber, A., Born, J. & Rodriguez Martínez, M. Titan: T-cell receptor on biomedical text. arXiv preprint arXiv:2403.18421 (2024).
+specificity prediction with bimodal attention networks. 77. Zhang, O. et al. Graph neural networks in modern ai-aided drug
+Bioinformatics 37, i237–i244 (2021). discovery. Chem. Rev. 125, 10001–10103 (2025).
+55. Jankauskaitė, J., Jiménez-García, B., Dapkūnas, J., Fernández- 78. Rives, A. et al. Biological structure and function emerge from scaling
+Recio, J. & Moal, I. H. Skempi 2.0: an updated benchmark of changes unsupervised learning to 250 million protein sequences. Proc. Natl.
+in protein–protein binding energy, kinetics and thermodynamics Acad. Sci. 118, e2016239118 (2021).
+upon mutation. Bioinformatics 35, 462–469 (2019). 79. Zhou, G. et al. Uni-mol: A universal 3d molecular representation
+56. Liu, X., Feng, H., Lü, Z. & Xia, K. Persistent tor-algebra for learning framework. In The eleventh international conference on
+protein–protein interaction analysis. Brief. Bioinforma. 24, bbad046 learning representations (2023).
+(2023). 80. Wang, J. et al. Token-mol 1.0: tokenized drug design with large
+57. Wang, M., Cang, Z. & Wei, G.-W. A topology-based network tree for language models. Nat. Commun. 16, 4416 (2025).
+the prediction of protein–protein binding affinity changes following 81. Hayes, T. et al. Simulating 500 million years of evolution with a
+mutation. Nat. Mach. Intell. 2, 116–123 (2020). language model. bioRxiv https://www.biorxiv.org/content/early/
+58. Guo, Z. & Yamaguchi, R. Machine learning methods for protein- 2024/07/02/2024.07.01.600583.full.pdf (2024).
+protein binding affinity prediction in protein design. Front. 82. Zhao, H. et al. Protein–peptide docking with a rational and accurate
+Bioinforma. 2, 1065703 (2022). diffusion generative model. Nat. Mach. Intell. 7, 1308–1321 (2025).
+59. Berman, H. M. et al. The Protein Data Bank. Nucleic Acids Res. 28, 83. Watson, J. L. et al. De novo design of protein structure and function
+235–242 (2000). with rfdiffusion. Nature 620, 1089–1100 (2023).
+60. Xu, M. et al. Peer: a comprehensive and multi-task benchmark for 84. Hoogeboom, E., Satorras, V. G., Vignac, C. & Welling, M. Equivariant
+protein sequence understanding. Adv. Neural Inf. Process. Syst. 35, diffusion for molecule generation in 3d (2022). arxiv: 2203.17003
+35156–35173 (2022). 85. Gridach, M., Nanavati, J., Abidine, K. Z. E., Mendes, L. & Mack, C.
+61. Gilson, M. K. et al. BindingDB in 2015: A public database for Agentic AI for scientific discovery: A survey of progress, challenges,
+medicinal chemistry, computational chemistry and systems and future directions. arXiv preprint arXiv:2503.08979 (2025).
+pharmacology. Nucleic Acids Res 44, D1045–53 (2015). 86. Ramos, M. C., Collison, C. J. & White, A. D. A review of large
+62. Mason, D. M. et al. Optimization of therapeutic antibodies by language models and autonomous agents in chemistry. Chem. Sci.
+predicting antigen specificity from antibody sequence via deep 16, 2514–2572 (2025).
+learning. Nat. Biomed. Eng. 5, 600–612 (2021). 87. Vaswani, A. et al. Attention is all you need. Adv. Neural Inform.
+63. Jing, H. et al. Accurate prediction of antibody function and structure Processing Syst. (NeurIPS), 30, 5998–6008 (2017).
+using bio-inspired antibody language model. Brief. Bioinforma. 25, 88. Raffel, C. et al. Exploring the limits of transfer learning with a unified
+bbae245 (2024). text-to-text transformer. J. Mach. Learn. Res. 21, 1–67 (2020).
+64. Bennett, N. R. et al. Atomically accurate de novo design of 89. Chen, B. et al. xtrimopglm: Unified 100b-scale pre-trained
+antibodies with rfdiffusion. bioRxiv https://www.biorxiv.org/content/ transformer for deciphering the language of protein (2024). arXiv:
+early/2025/02/28/2024.03.14.585103.full.pdf (2025). 2401.06199
+npj Drug Discovery | ( 2026) 3:14 10
+
+===== PAGE 11 =====
+https://doi.org/10.1038/s44386-026-00047-4 Article
+90. Pei, Q. et al. Biot5: Enriching cross-modal integration in biology with Author contributions
+chemical knowledge and natural language associations. In Proc. Study Design: Y. Shoshan, M.R., and M.O.F. contributed to the conception
+2023 Conference on Empirical Methods in Natural Language and design of the study. AI Development: Y.Shoshan, M.R., M.O.F., V.R.,
+Processing (EMNLP), 1102–1123 (2023). A.G., E.B., S.R.C., S.P., I.A., B.S., L.H., M.N., S.R., and M.D. were involved in
+91. Pei, Q. et al. Biot5+: Towards generalized biological understanding the development of the AI components usedin the study. Experiments: M.R.,
+with iupac integration and multi-task tuning. Findings of ACL 2024, V.R., A.G., E.B., I.A., Y.Shamay, and S.K. conducted the experiments and
+1216–1240 (2024). contributed to data acquisition and analysis. Manuscript Writing: Y.
+92. Chaves, J. M. Z. et al. Tx-llm: A large language model for Shoshan., M.R., M.O.F., V.R., A.G., E.B., S.R.C., S.K, and Y.Shamay
+therapeutics. arXiv preprint arXiv:2406.06316 (2024). contributed to drafting and revising the manuscript. Critical Revisions: J.W.,
+93. Touvron, H. et al. Llama: Open and efficient foundation language J.M., and P.S. provided substantial edits and critical feedback on the
+models. arXiv: 2302.13971 (2023). manuscript.Supervision: E.H. and M.R.Z. supervised the overall project and
+94. Born, J. & Manica, M. Regression transformer enables concurrent provided strategic guidance. All authors have read and approved the
+sequence regression and generation for molecular language submitted version of the manuscript.
+modelling. Nat. Mach. Intell. 5, 432–444 (2023).
+95. Zausinger, J. et al. Regress, don’t guess – a regression-like loss on Competing interests
+number tokens for language models (2024). arXiv: 2411.02083 The authors declare no competing interests.
+96. van den Oord, A., Vinyals, O. & Kavukcuoglu, K. Neural discrete
+representation learning (2018). arXiv: 1711.00937 Additional information
+97. Xiong, P., Zhang, C., Zheng, W. & Zhang, Y. Bindprofx: assessing Supplementary information The online version contains
+mutation-induced binding affinity change by protein interface supplementary material available at
+profiles with pseudo-counts. J. Mol. Biol. 429, 426–434 (2017). https://doi.org/10.1038/s44386-026-00047-4.
+98. Olsen, T. H., Boyles, F. & Deane, C. M. Observed antibody space: A
+diverse database of cleaned, annotated, and translated unpaired Correspondence and requests for materials should be addressed to
+and paired antibody sequences. Protein Sci. 31, 141–146 (2022). Yoel Shoshan.
+99. Suzek, B. E. et al. UniRef clusters: a comprehensive and scalable
+alternative for improving sequence similarity searches. Reprints and permissions information is available at
+Bioinformatics 31, 926–932 (2015). http://www.nature.com/reprints
+100. Tingle, B. I. et al. Zinc-22-a free multi-billion-scale database of
+tangible compounds for ligand discovery. J. Chem. Inf. Modeling 63, Publisher’s note Springer Nature remains neutral with regard to
+1166–1176 (2023). jurisdictional claims in published maps and institutional affiliations.
+101. Kim, S. et al. PubChem 2023 update. Nucleic Acids Res. 51,
+D1373–D1380 (2022). Open Access This article is licensed under a Creative Commons
+102. Szklarczyk, D. et al. The STRING database in 2023: protein-protein Attribution 4.0 International License, which permits use, sharing,
+association networks and functional enrichment analyses for any adaptation, distribution and reproduction in any medium or format, as long
+sequenced genome of interest. Nucleic Acids Res. 51, D638–D646 as you give appropriate credit to the original author(s) and the source,
+(2022). provide a link to the Creative Commons licence, and indicate if changes
+103. Biology, C. S.-C. et al. Cz cellxgene discover: A single-cell data were made. The images or other third party material in this article are
+platform for scalable exploration, analysis and modeling of included in the article’s Creative Commons licence, unless indicated
+aggregated data. BioRxiv 2023–10 https://doi.org/10.1093/nar/ otherwise in a credit line to the material. If material is not included in the
+gkae1142 (2023). article’s Creative Commons licence and your intended use is not permitted
+104. Jin, R. et al. Attabseq: an attention-based deep learning prediction by statutory regulation or exceeds the permitted use, you will need to
+method for antigen–antibody binding affinity changes based on obtain permission directly from the copyright holder. To view a copy of this
+protein sequences. Brief. Bioinforma. 25, bbae304 (2024). licence, visit http://creativecommons.org/licenses/by/4.0/.
+Acknowledgements © The Author(s) 2026
+Partially Supported by IBM-Technion Research Collaboration.
+npj Drug Discovery | ( 2026) 3:14 11
