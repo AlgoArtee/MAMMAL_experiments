@@ -210,7 +210,7 @@ Since many of the tasks on which **ibm/biomed.omics.bl.sm.ma-ted-458m** is train
 # Tutorials
 If you are interested in a specific guide / tutorial, feel free to [open an issue](https://github.com/BiomedSciAI/biomed-multi-alignment/issues/new).
 
-For local Windows/Conda setup, project-local model downloads, and command-line walkthroughs for every example in this repository, see [docs/tutorials](./docs/tutorials/README.md).
+For local Windows/Conda setup, shared model and dataset downloads under `F:\00_AI\BIO_MODELS`, and command-line walkthroughs for every example in this repository, see [docs/tutorials](./docs/tutorials/README.md).
 
 ### Advanced
 * Create a new Mammal task. [[link](./tutorials/advanced_create_new_task.ipynb)]

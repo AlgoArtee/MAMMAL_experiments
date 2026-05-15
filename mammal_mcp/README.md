@@ -33,7 +33,7 @@ uv run python -m server
 
 Then wait for all the models to be downloaded before quiting the server.
 
-When this server is run from the project-local setup, model assets are stored in the repository cache configured by `HF_HUB_CACHE` (normally `<repo>/.hf_cache/hub`). This avoids creating a second `mammal_mcp/model_cache` copy. See `../docs/tutorials/11_mcp_server.md` for the Windows/Conda workflow.
+When this server is run from the project-local setup, model assets are stored in the shared cache configured by `HF_HUB_CACHE` (normally `F:\00_AI\BIO_MODELS\hf_cache\hub`). This avoids creating a second `mammal_mcp/model_cache` copy. See `../docs/tutorials/11_mcp_server.md` for the Windows/Conda workflow.
 
 ## Running the server using STDIO (default)
 

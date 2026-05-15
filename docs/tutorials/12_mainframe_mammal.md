@@ -24,23 +24,23 @@ Download from `https://www.aircheck.ai/datasets`, tab `Datasets for Hands-on`.
 Expected raw files:
 
 ```text
-data/mainframe/raw/DREAM_Challenge_1_TrainSet.parquet
-data/mainframe/raw/DREAM_Target2035_Challenge_test_data.csv
-data/mainframe/raw/PGK2_CDD.parquet
-data/mainframe/raw/PGK2_Creative.parquet
+F:\00_AI\BIO_MODELS\data\mainframe\raw\DREAM_Challenge_1_TrainSet.parquet
+F:\00_AI\BIO_MODELS\data\mainframe\raw\DREAM_Target2035_Challenge_test_data.csv
+F:\00_AI\BIO_MODELS\data\mainframe\raw\PGK2_CDD.parquet
+F:\00_AI\BIO_MODELS\data\mainframe\raw\PGK2_Creative.parquet
 ```
 
 Expected processed files:
 
 ```text
-data/mainframe/wdr91/train.csv
-data/mainframe/wdr91/val.csv
-data/mainframe/wdr91/test.csv
-data/mainframe/wdr91_eval.csv
-data/mainframe/pgk2/train.csv
-data/mainframe/pgk2/val.csv
-data/mainframe/pgk2/test.csv
-data/mainframe/pgk2_creative.csv
+F:\00_AI\BIO_MODELS\data\mainframe\wdr91\train.csv
+F:\00_AI\BIO_MODELS\data\mainframe\wdr91\val.csv
+F:\00_AI\BIO_MODELS\data\mainframe\wdr91\test.csv
+F:\00_AI\BIO_MODELS\data\mainframe\wdr91_eval.csv
+F:\00_AI\BIO_MODELS\data\mainframe\pgk2\train.csv
+F:\00_AI\BIO_MODELS\data\mainframe\pgk2\val.csv
+F:\00_AI\BIO_MODELS\data\mainframe\pgk2\test.csv
+F:\00_AI\BIO_MODELS\data\mainframe\pgk2_creative.csv
 ```
 
 Each processed file should have:
@@ -63,9 +63,9 @@ Use the project paths above instead of `/content` or `/proj/...`.
 ## Suggested local output paths
 
 ```text
-models/fine_tuned/mainframe/mammal/wdr91
-models/fine_tuned/mainframe/mammal/pgk2
-tutorial_runs/mainframe/mammal
+F:\00_AI\BIO_MODELS\models\fine_tuned\mainframe\mammal\wdr91
+F:\00_AI\BIO_MODELS\models\fine_tuned\mainframe\mammal\pgk2
+F:\00_AI\BIO_MODELS\tutorial_runs\mainframe\mammal
 ```
 
 ## Expected output
@@ -75,7 +75,7 @@ Fine-tuning writes checkpoints. Inference writes prediction CSVs for later analy
 ## Runtime notes
 
 - Start with the notebook demo-size cells before full training.
-- Keep raw Aircheck files under `data/mainframe/raw`.
+- Keep raw Aircheck files under `F:\00_AI\BIO_MODELS\data\mainframe\raw`.
 
 ## Troubleshooting
 

@@ -19,7 +19,9 @@ logger.setLevel(logging.DEBUG)
 assets = {}
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-MODEL_CACHE_DIR = Path(os.getenv("HF_HUB_CACHE", PROJECT_ROOT / ".hf_cache" / "hub"))
+DEFAULT_ASSET_ROOT = Path(r"F:\00_AI\BIO_MODELS")
+ASSET_ROOT = Path(os.getenv("BIO_MODELS_ROOT", DEFAULT_ASSET_ROOT))
+MODEL_CACHE_DIR = Path(os.getenv("HF_HUB_CACHE", ASSET_ROOT / "hf_cache" / "hub"))
 MODEL_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 MODEL_CACHE_DIR_STR = str(MODEL_CACHE_DIR)
 

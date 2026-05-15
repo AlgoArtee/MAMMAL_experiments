@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Download model and tokenizer assets into the project-local Hugging Face cache.
+Download model and tokenizer assets into the shared Hugging Face cache at `F:\00_AI\BIO_MODELS`.
 
 ## Prerequisites
 
@@ -15,11 +15,11 @@ Complete [environment setup](00_environment.md), then activate:
 ## Cache layout
 
 ```text
-.hf_cache/hub                 Hugging Face model snapshots
-.hf_cache/transformers        Transformers cache
-.torch_cache                  Torch cache
-models/fine_tuned             Local fine-tune outputs
-data                          Downloaded and processed datasets
+F:\00_AI\BIO_MODELS\hf_cache\hub             Hugging Face model snapshots
+F:\00_AI\BIO_MODELS\hf_cache\transformers    Transformers cache
+F:\00_AI\BIO_MODELS\torch_cache              Torch cache
+F:\00_AI\BIO_MODELS\models\fine_tuned         Local fine-tune outputs
+F:\00_AI\BIO_MODELS\data                      Downloaded and processed datasets
 ```
 
 ## Download groups
@@ -60,6 +60,12 @@ Everything:
 python .\scripts\download_models.py --all
 ```
 
+Datasets:
+
+```powershell
+python .\scripts\download_datasets.py --all
+```
+
 ## Offline verification
 
 After a download, check that assets are available without network access:
@@ -87,11 +93,11 @@ python .\scripts\download_models.py --group core --local-files-only
 ## Runtime notes
 
 - The full set can require many GB of disk space.
-- The downloader intentionally uses `.hf_cache/hub`.
+- The downloader intentionally uses `F:\00_AI\BIO_MODELS\hf_cache\hub`.
 - MCP now uses `HF_HUB_CACHE` too, so it does not create a second `mammal_mcp/model_cache`.
 
 ## Troubleshooting
 
 - Certificate or network errors: rerun in a shell with working Hugging Face access.
 - Private/gated model error: run `huggingface-cli login` in the active environment.
-- Disk full: remove unused snapshots from `.hf_cache/hub`.
+- Disk full: remove unused snapshots from `F:\00_AI\BIO_MODELS\hf_cache\hub`.

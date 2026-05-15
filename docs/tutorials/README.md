@@ -20,4 +20,4 @@ Read them in order for a first setup:
 14. [MAINFRAME MMELON optional](13_mainframe_mmelon_optional.md)
 15. [MAINFRAME analysis](14_mainframe_analysis.md)
 
-All commands are intended to run from the repository root unless a tutorial says otherwise. Large runtime artifacts should stay in `.conda/`, `.hf_cache/`, `.torch_cache/`, `models/`, `data/`, or `tutorial_runs/`; these paths are git-ignored.
+All commands are intended to run from the repository root unless a tutorial says otherwise. The default shared asset root is `F:\00_AI\BIO_MODELS`; large runtime artifacts should stay there under `hf_cache/`, `torch_cache/`, `models/`, `data/`, or `tutorial_runs/`.

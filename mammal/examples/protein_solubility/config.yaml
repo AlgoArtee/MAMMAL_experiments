@@ -1,6 +1,6 @@
 name: mammal_solubility_finetune
-root: "."
-model_dir: ${root}/${name}
+root: ${oc.env:BIO_MODELS_ROOT,F:/00_AI/BIO_MODELS}
+model_dir: ${root}/models/fine_tuned/${name}
 seed: 1234
 
 task:
@@ -11,7 +11,7 @@ task:
   seed: ${seed}
   data_module_kwargs:
     # details about the arguments below can be found on mammal.examples.protein_solubility.pl_data_module.ProteinSolubilityDataModule()
-    data_path: ./example_solubility_data
+    data_path: ${oc.env:MAMMAL_DATA_DIR,F:/00_AI/BIO_MODELS/data}/protein_solubility
 
     train_dl_kwargs: # Dataloader constructor parameters
       num_workers: 8

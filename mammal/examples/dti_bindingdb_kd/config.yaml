@@ -1,6 +1,6 @@
 name: mammal_tdc_dti_bindingdb_kd
-root: "."
-model_dir: ${root}/${name}
+root: ${oc.env:BIO_MODELS_ROOT,F:/00_AI/BIO_MODELS}
+model_dir: ${root}/models/fine_tuned/${name}
 seed: 1234
 
 

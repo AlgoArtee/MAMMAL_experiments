@@ -23,7 +23,13 @@ Fine-tuning uses TDC GDSC datasets. The config selects:
 dataset_name: GDSC2
 ```
 
-Use `data/cell_line_drug_response` for any persistent downloaded or custom files.
+Use `F:\00_AI\BIO_MODELS\data\cell_line_drug_response` for any persistent downloaded or custom files.
+
+Download GDSC1/GDSC2 through TDC with:
+
+```powershell
+python .\scripts\download_datasets.py --group gdsc
+```
 
 ## Fine-tune
 
@@ -31,15 +37,14 @@ Use `data/cell_line_drug_response` for any persistent downloaded or custom files
 python mammal\main_finetune.py `
   --config-name config.yaml `
   --config-path mammal\examples\cell_line_drug_response `
-  root=. `
-  name=models/fine_tuned/cell_line_drug_response
+  name=cell_line_drug_response
 ```
 
 ## Inference by GDSC cell-line name
 
 ```powershell
 python mammal\examples\cell_line_drug_response\main_infer.py `
-  --model_path models/fine_tuned/cell_line_drug_response/best_epoch.ckpt `
+  --model_path F:\00_AI\BIO_MODELS\models\fine_tuned\cell_line_drug_response\best_epoch.ckpt `
   --cell_line_name "A549" `
   --drug_smiles "CC(=O)NCCC1=CNc2c1cc(OC)cc2" `
   --drug_name "example_drug"
@@ -49,8 +54,8 @@ python mammal\examples\cell_line_drug_response\main_infer.py `
 
 ```powershell
 python mammal\examples\cell_line_drug_response\main_infer.py `
-  --model_path models/fine_tuned/cell_line_drug_response/best_epoch.ckpt `
-  --cell_line_h5ad_file data/cell_line_drug_response/example_cell_line.h5ad `
+  --model_path F:\00_AI\BIO_MODELS\models\fine_tuned\cell_line_drug_response\best_epoch.ckpt `
+  --cell_line_h5ad_file F:\00_AI\BIO_MODELS\data\cell_line_drug_response\example_cell_line.h5ad `
   --drug_smiles "CC(=O)NCCC1=CNc2c1cc(OC)cc2" `
   --drug_name "example_drug"
 ```
@@ -62,7 +67,7 @@ python mammal\main_finetune.py `
   --config-name config.yaml `
   --config-path mammal\examples\cell_line_drug_response `
   evaluate=True `
-  model.pretrained_kwargs.pretrained_model_name_or_path=models/fine_tuned/cell_line_drug_response/best_epoch.ckpt
+  model.pretrained_kwargs.pretrained_model_name_or_path=F:\00_AI\BIO_MODELS\models\fine_tuned\cell_line_drug_response\best_epoch.ckpt
 ```
 
 ## Expected output

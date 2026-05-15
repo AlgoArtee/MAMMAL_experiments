@@ -2,8 +2,8 @@
 # Uses GDSC datasets (GDSC1 or GDSC2) from TDC for training MAMMAL on IC50 prediction
 
 name: mammal_cldr_gdsc2_seed_1234
-root: "."
-model_dir: ${root}/${name}
+root: ${oc.env:BIO_MODELS_ROOT,F:/00_AI/BIO_MODELS}
+model_dir: ${root}/models/fine_tuned/${name}
 seed: 1234
 
 task:
@@ -14,7 +14,7 @@ task:
 
   data_module_kwargs:
     dataset_name: "GDSC2"  # or "GDSC1"
-    dataset_path: null  # TDC will download if not specified
+    dataset_path: ${oc.env:MAMMAL_DATA_DIR,F:/00_AI/BIO_MODELS/data}/tdc
     limit_samples: null  # Set a number for quick testing on a subset of the data (e.g., 100)
     batch_size: 8
     encoder_input_max_seq_len: 1500 # max sequence length for encoder input including both genes and smiles tokens

@@ -20,7 +20,7 @@ python .\scripts\download_models.py --group core
 Use your own dataset under:
 
 ```text
-data/custom_task
+F:\00_AI\BIO_MODELS\data\custom_task
 ```
 
 For a first implementation, mirror the protein solubility task.
@@ -37,7 +37,7 @@ For a first implementation, mirror the protein solubility task.
    - `task._target_`
    - tokenizer path
    - `model.pretrained_kwargs.pretrained_model_name_or_path`
-   - checkpoint output under `models/fine_tuned/<task_name>`
+   - checkpoint output under `F:\00_AI\BIO_MODELS\models\fine_tuned\<task_name>`
 5. Add `main_infer.py` for single-sample inference.
 6. Add at least one smoke test under `mammal/examples/tests/`.
 

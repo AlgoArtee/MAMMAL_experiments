@@ -34,7 +34,7 @@ The script prints a decoded generated output for the calmodulin/calcineurin prot
 ## Runtime notes
 
 - This is a sequence-to-sequence generation example using the base model.
-- First run downloads the model if it is not already in `.hf_cache/hub`.
+- First run downloads the model if it is not already in `F:\00_AI\BIO_MODELS\hf_cache\hub`.
 
 ## Troubleshooting
 

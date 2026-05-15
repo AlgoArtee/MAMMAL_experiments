@@ -39,9 +39,9 @@ tutorials/MAINFRAME_2026/MMELON_inference.ipynb
 Use project paths:
 
 ```text
-data/mainframe
-models/fine_tuned/mainframe/mmelon
-tutorial_runs/mainframe/mmelon
+F:\00_AI\BIO_MODELS\data\mainframe
+F:\00_AI\BIO_MODELS\models\fine_tuned\mainframe\mmelon
+F:\00_AI\BIO_MODELS\tutorial_runs\mainframe\mmelon
 ```
 
 ## Expected output

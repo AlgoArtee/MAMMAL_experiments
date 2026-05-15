@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Create a reproducible Python environment stored inside this project folder.
+Create a reproducible Python environment stored inside this project folder, while model and dataset assets live in `F:\00_AI\BIO_MODELS`.
 
 ## Prerequisites
 
@@ -42,6 +42,12 @@ The environment is created at:
 .conda/mammal
 ```
 
+The default shared asset root is:
+
+```text
+F:\00_AI\BIO_MODELS
+```
+
 ## Activate the environment
 
 Dot-source the activation script so it can update the current shell:
@@ -53,12 +59,12 @@ Dot-source the activation script so it can update the current shell:
 This sets:
 
 ```text
-HF_HOME=.hf_cache
-HF_HUB_CACHE=.hf_cache/hub
-TRANSFORMERS_CACHE=.hf_cache/transformers
-TORCH_HOME=.torch_cache
-MAMMAL_MODELS_DIR=models
-MAMMAL_DATA_DIR=data
+HF_HOME=F:\00_AI\BIO_MODELS\hf_cache
+HF_HUB_CACHE=F:\00_AI\BIO_MODELS\hf_cache\hub
+TRANSFORMERS_CACHE=F:\00_AI\BIO_MODELS\hf_cache\transformers
+TORCH_HOME=F:\00_AI\BIO_MODELS\torch_cache
+MAMMAL_MODELS_DIR=F:\00_AI\BIO_MODELS\models
+MAMMAL_DATA_DIR=F:\00_AI\BIO_MODELS\data
 CLEARML_OFFLINE_MODE=1
 ```
 
@@ -77,7 +83,7 @@ Expected success:
 
 ## Runtime notes
 
-- Do not commit `.conda/`.
+- Do not commit `.conda/` or copied assets.
 - Keep all examples and tutorials in this same activated shell.
 - If Conda activation fails, open an Anaconda/Miniconda PowerShell and rerun the activation command.
 

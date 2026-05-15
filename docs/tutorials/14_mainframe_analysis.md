@@ -25,8 +25,8 @@ None for analysis.
 Prediction CSVs from:
 
 ```text
-tutorial_runs/mainframe/mammal
-tutorial_runs/mainframe/mmelon
+F:\00_AI\BIO_MODELS\tutorial_runs\mainframe\mammal
+F:\00_AI\BIO_MODELS\tutorial_runs\mainframe\mmelon
 ```
 
 The notebook expects labels and prediction scores for ROC-AUC, PR-AUC, enrichment, and clustering.
@@ -42,8 +42,8 @@ tutorials/MAINFRAME_2026/data_and_predictions_analysis.ipynb
 Use project-local paths instead of `/content` or `/proj/...`:
 
 ```text
-DATA_DIR = "data/mainframe"
-RUN_DIR = "tutorial_runs/mainframe"
+DATA_DIR = r"F:\00_AI\BIO_MODELS\data\mainframe"
+RUN_DIR = r"F:\00_AI\BIO_MODELS\tutorial_runs\mainframe"
 ```
 
 ## Expected output
@@ -52,7 +52,7 @@ The analysis produces classification metrics, enrichment-at-k tables, molecular 
 
 ## Runtime notes
 
-- Keep plots and generated tables under `tutorial_runs/mainframe/analysis`.
+- Keep plots and generated tables under `F:\00_AI\BIO_MODELS\tutorial_runs\mainframe\analysis`.
 - RDKit can be slow on large molecular sets; test with a subset first.
 
 ## Troubleshooting

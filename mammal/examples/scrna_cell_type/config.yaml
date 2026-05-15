@@ -1,13 +1,13 @@
 name: cell_type_finetune
-root: "."
-model_dir: ${root}/${name}
+root: ${oc.env:BIO_MODELS_ROOT,F:/00_AI/BIO_MODELS}
+model_dir: ${root}/models/fine_tuned/${name}
 seed: 2024
 
 task:
   _target_: mammal.examples.scrna_cell_type.task.CellTypeTask
   _partial_: True
   data_module_kwargs:
-    data_path: "data/Zheng_68k_preprocessed.h5ad" #  this should be absolute or relative to the directory with the example code
+    data_path: ${oc.env:MAMMAL_DATA_DIR,F:/00_AI/BIO_MODELS/data}/scrna_cell_type/Zheng_68k_preprocessed.h5ad
     # this is the name of the observation the model will try to predict
     label_name: "cell-type"
     batch_size: 20

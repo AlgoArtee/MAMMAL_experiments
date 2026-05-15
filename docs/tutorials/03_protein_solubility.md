@@ -18,7 +18,11 @@ python .\scripts\download_models.py --group core --group finetuned
 
 ## Required datasets
 
-Fine-tuning downloads the solubility dataset into `example_solubility_data` by default. For local consistency, prefer overriding data paths into `data/protein_solubility` when extending the config.
+Fine-tuning uses `F:\00_AI\BIO_MODELS\data\protein_solubility` by default. Download it with:
+
+```powershell
+python .\scripts\download_datasets.py --group solubility
+```
 
 ## Fine-tune
 
@@ -26,15 +30,14 @@ Fine-tuning downloads the solubility dataset into `example_solubility_data` by d
 python mammal\main_finetune.py `
   --config-name config.yaml `
   --config-path mammal\examples\protein_solubility `
-  root=. `
-  name=models/fine_tuned/protein_solubility
+  name=protein_solubility
 ```
 
 ## Inference with a fine-tuned checkpoint
 
 ```powershell
 python mammal\examples\protein_solubility\main_infer.py `
-  models/fine_tuned/protein_solubility `
+  F:\00_AI\BIO_MODELS\models\fine_tuned\protein_solubility `
   "MSSKLLLAGLDIERVLAEKNFYKEWDTWIIEAMNVGDEEVDRIKEFKEDEIFEEAK"
 ```
 
@@ -53,12 +56,12 @@ python mammal\main_finetune.py `
   --config-name config.yaml `
   --config-path mammal\examples\protein_solubility `
   evaluate=True `
-  model.pretrained_kwargs.pretrained_model_name_or_path=models/fine_tuned/protein_solubility/best_epoch.ckpt
+  model.pretrained_kwargs.pretrained_model_name_or_path=F:\00_AI\BIO_MODELS\models\fine_tuned\protein_solubility\best_epoch.ckpt
 ```
 
 ## Expected output
 
-Inference prints a class prediction and score. Training writes checkpoints under `models/fine_tuned/protein_solubility`.
+Inference prints a class prediction and score. Training writes checkpoints under `F:\00_AI\BIO_MODELS\models\fine_tuned\protein_solubility`.
 
 ## Runtime notes
 

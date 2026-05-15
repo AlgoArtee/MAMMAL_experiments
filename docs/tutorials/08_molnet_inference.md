@@ -41,4 +41,4 @@ Each command prints a binary prediction and score for the SMILES string.
 ## Troubleshooting
 
 - Invalid task name: use one of the three exact task names above.
-- Model download repeats: verify `HF_HUB_CACHE` points to `.hf_cache/hub`.
+- Model download repeats: verify `HF_HUB_CACHE` points to `F:\00_AI\BIO_MODELS\hf_cache\hub`.

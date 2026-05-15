@@ -77,7 +77,7 @@ python server.py
 
 ## Expected output
 
-Startup logs include `Assets loaded`. The server uses `.hf_cache/hub` through `HF_HUB_CACHE`, not `mammal_mcp/model_cache`.
+Startup logs include `Assets loaded`. The server uses `F:\00_AI\BIO_MODELS\hf_cache\hub` through `HF_HUB_CACHE`, not `mammal_mcp/model_cache`.
 
 ## Runtime notes
 

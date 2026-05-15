@@ -23,21 +23,26 @@ The example includes:
 mammal/examples/carcinogenicity/data/carcinogens_lagunin.tab
 ```
 
+Copy it into the shared dataset root with:
+
+```powershell
+python .\scripts\download_datasets.py --group carcinogenicity
+```
+
 ## Fine-tune
 
 ```powershell
 python mammal\main_finetune.py `
   --config-name config.yaml `
   --config-path mammal\examples\carcinogenicity `
-  root=. `
-  name=models/fine_tuned/carcinogenicity
+  name=carcinogenicity
 ```
 
 ## Inference
 
 ```powershell
 python mammal\examples\carcinogenicity\main_infer.py `
-  models/fine_tuned/carcinogenicity `
+  F:\00_AI\BIO_MODELS\models\fine_tuned\carcinogenicity `
   "CC(CCl)OC(C)CCl"
 ```
 
@@ -48,7 +53,7 @@ python mammal\main_finetune.py `
   --config-name config.yaml `
   --config-path mammal\examples\carcinogenicity `
   evaluate=True `
-  model.pretrained_kwargs.pretrained_model_name_or_path=models/fine_tuned/carcinogenicity/best_epoch.ckpt
+  model.pretrained_kwargs.pretrained_model_name_or_path=F:\00_AI\BIO_MODELS\models\fine_tuned\carcinogenicity\best_epoch.ckpt
 ```
 
 ## Expected output

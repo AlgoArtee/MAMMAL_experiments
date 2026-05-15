@@ -20,13 +20,13 @@ python .\scripts\download_models.py --group core
 The default config expects:
 
 ```text
-mammal/examples/scrna_cell_type/data/Zheng_68k_preprocessed.h5ad
+F:\00_AI\BIO_MODELS\data\scrna_cell_type\Zheng_68k_preprocessed.h5ad
 ```
 
-Prefer storing generated source data under:
+Download raw Zheng68k files with:
 
-```text
-data/scrna_cell_type
+```powershell
+python .\scripts\download_datasets.py --group zheng68k
 ```
 
 ## Prepare data
@@ -54,9 +54,9 @@ python mammal\main_finetune.py `
 
 ```powershell
 python mammal\examples\scrna_cell_type\scRNA_infer.py `
-  --model_path models/fine_tuned/scrna_cell_type/best_epoch.ckpt `
-  --tokenizer_path models/fine_tuned/scrna_cell_type/tokenizer `
-  --data_path mammal\examples\scrna_cell_type\data\Zheng_68k_preprocessed.h5ad
+  --model_path F:\00_AI\BIO_MODELS\models\fine_tuned\scrna_cell_type\best_epoch.ckpt `
+  --tokenizer_path F:\00_AI\BIO_MODELS\models\fine_tuned\scrna_cell_type\tokenizer `
+  --data_path F:\00_AI\BIO_MODELS\data\scrna_cell_type\Zheng_68k_preprocessed.h5ad
 ```
 
 ## Expected output

@@ -21,7 +21,13 @@ python .\scripts\download_models.py --group core --group finetuned
 Fine-tuning uses TDC BindingDB DTI data and downloads through TDC. Store persistent data under:
 
 ```text
-data/dti_bindingdb_kd
+F:\00_AI\BIO_MODELS\data\dti_bindingdb_kd
+```
+
+Download it with:
+
+```powershell
+python .\scripts\download_datasets.py --group dti
 ```
 
 ## Fine-tune
@@ -30,8 +36,7 @@ data/dti_bindingdb_kd
 python mammal\main_finetune.py `
   --config-name config.yaml `
   --config-path mammal\examples\dti_bindingdb_kd `
-  root=. `
-  name=models/fine_tuned/dti_bindingdb_kd
+  name=dti_bindingdb_kd
 ```
 
 ## Inference
@@ -45,7 +50,7 @@ norm_y_std=1.33808027428196
 
 ```powershell
 python mammal\examples\dti_bindingdb_kd\main_infer.py `
-  models/fine_tuned/dti_bindingdb_kd `
+  F:\00_AI\BIO_MODELS\models\fine_tuned\dti_bindingdb_kd `
   "NLMKRCTRGFRKLGKCTTLEEEKCKTLYPRGQCTCSDSKMNTHSCDCKSC" `
   "CC(=O)NCCC1=CNc2c1cc(OC)cc2" `
   5.79384684128215 `
@@ -59,7 +64,7 @@ python mammal\main_finetune.py `
   --config-name config.yaml `
   --config-path mammal\examples\dti_bindingdb_kd `
   evaluate=True `
-  model.pretrained_kwargs.pretrained_model_name_or_path=models/fine_tuned/dti_bindingdb_kd/best_epoch.ckpt
+  model.pretrained_kwargs.pretrained_model_name_or_path=F:\00_AI\BIO_MODELS\models\fine_tuned\dti_bindingdb_kd\best_epoch.ckpt
 ```
 
 ## Expected output
