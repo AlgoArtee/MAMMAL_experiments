@@ -7,7 +7,7 @@ Create a reproducible Python environment stored inside this project folder, whil
 ## Prerequisites
 
 - Windows PowerShell.
-- Conda available on `PATH`.
+- Conda available on `PATH`, or the bundled roop Conda executable at `F:\00_AI\roop\roop-unleashed-main\installer\installer_files\conda\Scripts\conda.exe`.
 - NVIDIA driver if you want GPU acceleration.
 
 ## Conda vs venv
@@ -24,6 +24,14 @@ From the repo root:
 .\scripts\setup_project_env.ps1
 ```
 
+If Conda is not on `PATH`, the setup script automatically falls back to:
+
+```text
+F:\00_AI\roop\roop-unleashed-main\installer\installer_files\conda\Scripts\conda.exe
+```
+
+That Conda installation is used only as the package manager. The existing roop environment at `F:\00_AI\roop\roop-unleashed-main\installer\installer_files\conda\envs\mammal_env` is not modified.
+
 For CPU-only setup:
 
 ```powershell
@@ -34,6 +42,12 @@ For MCP dependencies too:
 
 ```powershell
 .\scripts\setup_project_env.ps1 -WithMcp
+```
+
+If Conda fails with `CondaSSLError` on this machine, rerun with the scoped SSL fallback:
+
+```powershell
+.\scripts\setup_project_env.ps1 -DisableCondaSslVerification
 ```
 
 The environment is created at:
@@ -89,6 +103,7 @@ Expected success:
 
 ## Troubleshooting
 
-- `conda was not found`: install Miniconda or add Conda to `PATH`.
+- `conda was not found`: install Miniconda, add Conda to `PATH`, or pass `-CondaExe <path-to-conda.exe>`.
+- `CondaSSLError`: rerun setup with `-DisableCondaSslVerification`; this sets `CONDA_SSL_VERIFY=false` only for the current setup process.
 - `torch_cuda_available=False`: confirm `nvidia-smi` works, then rerun setup without `-CpuOnly`.
 - `ModuleNotFoundError`: rerun `pip install -e ".[examples]"` inside the activated environment.

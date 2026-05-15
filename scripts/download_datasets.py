@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import math
 import os
 import shutil
+import ssl
 import subprocess
 import sys
 import urllib.request
@@ -41,6 +43,25 @@ def download_file(url: str, destination: Path) -> None:
     print(f"download: {url}")
     urllib.request.urlretrieve(url, destination)
     print(f"saved: {destination}")
+
+
+def disable_ssl_verification() -> None:
+    ssl._create_default_https_context = ssl._create_unverified_context
+
+    try:
+        import requests
+        from urllib3.exceptions import InsecureRequestWarning
+
+        requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
+        original_request = requests.sessions.Session.request
+
+        def request_without_ssl_verification(self, method, url, **kwargs):
+            kwargs.setdefault("verify", False)
+            return original_request(self, method, url, **kwargs)
+
+        requests.sessions.Session.request = request_without_ssl_verification
+    except ImportError:
+        pass
 
 
 def download_solubility(data_root: Path) -> None:
@@ -103,7 +124,11 @@ def download_gdsc(data_root: Path) -> None:
         dataset_out.mkdir(parents=True, exist_ok=True)
         for split_name, df in split.items():
             df.to_pickle(dataset_out / f"{split_name}.pkl")
-        genes = list(data.get_gene_symbols())
+        genes = [
+            str(gene)
+            for gene in data.get_gene_symbols()
+            if gene is not None and not (isinstance(gene, float) and math.isnan(gene))
+        ]
         (dataset_out / "gene_symbols.txt").write_text("\n".join(genes), encoding="utf-8")
         print(f"ready: {dataset_out}")
 
@@ -206,11 +231,19 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Build Zheng68k h5ad files after downloading raw files.",
     )
+    parser.add_argument(
+        "--disable-ssl-verification",
+        action="store_true",
+        help="Use only on machines whose Python CA store cannot verify dataset host TLS certificates.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
+    if args.disable_ssl_verification:
+        disable_ssl_verification()
+
     asset_root = Path(args.asset_root)
     data_root = Path(os.environ.get("MAMMAL_DATA_DIR", asset_root / "data"))
     data_root.mkdir(parents=True, exist_ok=True)
