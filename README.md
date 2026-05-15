@@ -6,6 +6,17 @@
 
 # biomed-multi-alignment
 
+## Repository Attribution
+
+This repository is an experimental setup and documentation fork based on the original MAMMAL / `biomed-multi-alignment` project from IBM Research and BiomedSciAI:
+
+- Original repository: https://github.com/BiomedSciAI/biomed-multi-alignment
+- Original package: https://pypi.org/project/biomed-multi-alignment/
+- Original model: https://huggingface.co/ibm/biomed.omics.bl.sm.ma-ted-458m
+- Paper: https://arxiv.org/abs/2410.22367
+
+Local changes in this repository focus on Windows/project-local environment setup, shared asset caching under `F:\00_AI\BIO_MODELS`, dataset download helpers, and expanded tutorials. The original scientific model, architecture, examples, and package lineage remain credited to the upstream authors.
+
 **Update - MCP is now supported for MAMMAL agent integration visit [here](./mammal_mcp/README.md) for more information.**
 
 We introduce [**ibm/biomed.omics.bl.sm.ma-ted-458m**](https://arxiv.org/abs/2410.22367).
